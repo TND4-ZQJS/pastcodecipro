@@ -1,0 +1,2459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Filler - CI Pro Universe</title>
+<style>
+/* ============================================================
+    GLOBAL DESIGN VARIABLES (Unified Workspace Framework)
+   ============================================================ */
+*, *::before, *::after {box-sizing: border-box;margin: 0; padding: 0; }
+:root {--nav-height: 52px;--accent: #0071e3;--bg: #f5f5f7;--surface: #ffffff;  /* Card surface background */--text-primary: #1d1d1f;--text-secondary: #515154;--text-tertiary: #86868b;--border: rgba(0, 0, 0, 0.06);--line: #e9e9ee;}
+body {background-color: var(--bg);color: var(--text-primary);font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;-webkit-font-smoothing: antialiased;line-height: 1.5;}
+.container {max-width: 940px;margin: 40px auto;padding: 0 24px 20px;}
+
+/* ============================================================
+    STICKY STYLISH NAVBAR STRUCTURE
+   ============================================================ */
+.navbar {position: sticky;top: 0;z-index: 100;background: rgba(255, 255, 255, 0.85);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border-bottom: 1px solid var(--border);height: var(--nav-height);}
+.nav-container {max-width: 940px;margin: 0 auto;padding: 0 24px;height: 100%;display: flex;align-items: center;gap: 32px;}
+.logo {font-size: 16px;font-weight: 700;color: var(--text-primary);cursor: pointer;letter-spacing: -0.02em;flex-shrink: 0;}
+.nav-menu {display: flex;gap: 4px;align-items: center;margin-left: auto;}
+.nav-item {font-size: 13px;font-weight: 500;color: var(--text-secondary);text-decoration: none;padding: 6px 12px;border-radius: 8px;transition: background 0.15s, color 0.15s;white-space: nowrap;}
+.nav-item:hover {background: rgba(0,0,0,0.05); color: var(--text-primary);}
+.nav-item.active {background: rgba(0,113,227,0.08); color: var(--accent);}
+.menu-toggle {display: none;flex-direction: column;gap: 5px;cursor: pointer;margin-left: auto;padding: 6px;}
+.menu-toggle span {display: block;width: 22px;height: 2px;background: var(--text-primary);border-radius: 2px;transition: 0.3s;}
+@media (max-width: 700px) {
+    .menu-toggle { display: flex; }
+    .nav-menu {display: none;position: absolute;top: var(--nav-height);left: 0; right: 0;background: rgba(255,255,255,0.97);backdrop-filter: blur(20px);flex-direction: column;padding: 12px 16px 20px;gap: 2px;border-bottom: 1px solid var(--border);}
+    .nav-menu.show { display: flex; }
+    .nav-item { width: 100%; padding: 10px 14px; }
+}
+
+/* Security Box */
+.security {padding: 60px 0;}
+.security-box {background-color: transparent;border-left: 3px solid #86868b;padding: 16px 24px;font-size: 14px;color: #6e6e73;}        
+
+/* Footer */
+.footer {padding: 40px 24px;text-align: center;font-size: 12px;color: #86868b;border-top: 1px solid #e8e8ed;}    
+
+/* Hero Section */
+.hero {padding-top: 140px;padding-bottom: 80px;text-align: center;}
+.badge {font-size: 20px;font-weight: 600;color: #bf4800;text-transform: uppercase;letter-spacing: 0.05em;display: block;margin-bottom: 12px;}
+.hero h1 {font-size: 48px;font-weight: 700;letter-spacing: -0.03em;line-height: 1.1;margin-bottom: 16px;color: #1d1d1f;}
+.subtitle {font-size: 19px;color: #86868b;max-width: 640px;margin: 0 auto;font-weight: 400;letter-spacing: -0.01em;}    
+
+/* ============================================================
+   SECURE PAGE CONTENT STYLING
+   ============================================================ */
+.secure-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 500px;
+}
+
+#loadingStatus {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6); 
+    -webkit-backdrop-filter: blur(12px);          
+    backdrop-filter: blur(12px);                  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    z-index: 10;
+    transition: opacity 0.4s ease, visibility 0.4s ease; 
+}
+
+.spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid var(--apple-border);
+    border-top-color: var(--apple-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+    
+    
+/* ============================================================
+    FILLER WORKSPACE COMPONENT STYLES
+   ============================================================ */
+  h1{margin:15px 0 18px 0;font-size:1.40rem}
+  .section{background:#fbfbfd;border:1px solid #eee;padding:14px;border-radius:10px;margin:12px 0}
+  .section h2{margin:0 0 10px 0;font-size:1.05rem}
+  label{display:block;margin:8px 0;font-size:0.95rem}
+  input[type=text],input[type=email],input[type=number],input[type=tel],select,textarea{
+    width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;margin-top:6px;font-size:1rem;background:#fff
+  }
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0}
+  .muted{color:var(--muted);font-size:0.85rem}
+  button{background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:10px;cursor:pointer}
+  button.secondary{background:#999}
+  button.ghost{background:transparent;border:1px solid var(--line);color:#333}
+  .actions{display:flex;gap:12px;align-items:center}
+
+/*making the checkbox in proper alignment*/
+.checkbox-line {display: flex; align-items: center; gap: 8px; margin-top: 10px;}
+.checkbox-line input[type="checkbox"] {width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer;}
+
+/* Floating Label Style */
+.floating-label{position:relative;margin-top:18px;}
+.floating-label input,
+.floating-label select,
+.floating-label textarea{width:100%; padding:12px 10px; font-size:16px; border:1px solid #ccc; border-radius:8px; background:transparent; outline:none;}
+.floating-label label{position:absolute; left:12px; top:12px; color:#777; pointer-events:none; transition:all 0.2s ease; background:white; padding:0 4px;}
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label,
+.floating-label select:focus + label,
+.floating-label select:valid + label,
+.floating-label textarea:focus + label,
+.floating-label textarea:not(:placeholder-shown) + label{top:-8px; left:10px; font-size:12px; color:var(--accent);}
+
+/* Card Number Block */
+.card-number-block {margin-top: 18px; margin-bottom: 18px;}
+.card-number-block label {display: block; font-size: 14px; font-weight: 500; color: var(--accent); margin-bottom: 6px; letter-spacing: 0.05em;}
+.card-number-inputs {display: flex; gap: 8px;}
+.card-number-inputs .card-digit {width: 65px; padding: 10px; text-align: center; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; outline: none; transition: border-color 0.2s, box-shadow 0.2s;}
+.card-number-inputs .card-digit:focus {border-color: var(--accent); box-shadow: 0 0 4px rgba(0, 122, 255, 0.2);}
+.card-number-block small {display: block; margin-top: 6px; color: var(--muted); font-size: 0.8rem;}
+
+/* ======= UPDATED EXPIRY FIELD (floating-label style) ======= */
+.expiry-row {display: flex; gap: 12px; align-items: flex-start; margin-top: 20px;}
+.expiry-field {flex: 1; position: relative;}
+.expiry-field select {width: 100%; padding: 14px 12px 10px 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; background: white; outline: none; appearance: none; transition: all 0.2s ease;}
+.expiry-field label {position: absolute; left: 12px; top: 14px; color: #777; font-size: 15px; pointer-events: none; transition: all 0.2s ease; background: white; padding: 0 4px;}
+
+/* Floating effect trigger */
+.expiry-field select:focus + label,
+.expiry-field select:valid + label {top: -8px; left: 10px; font-size: 12px; color: var(--accent); background: white;}
+.expiry-field select:focus {border-color: var(--accent); box-shadow: 0 0 4px rgba(0, 122, 255, 0.2);}
+
+  /* Signature preview tiles */
+.sig-preview{width:100%; height:150px; border:1px dashed #bbb; border-radius:10px; display:flex; align-items:center; justify-content:center; background:#fff; cursor:pointer; position:relative;}
+.sig-preview img{ max-width:100%; max-height:100%; object-fit:contain; }
+.sig-preview span{ color:#999; }
+
+  /* Signature Modal */
+.sig-modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:1000; }
+.sig-modal .box{width:min(560px, 92vw); background:#fff; margin:6vh auto; padding:14px; border-radius:12px; box-shadow:0 18px 50px rgba(0,0,0,.25)}
+.sig-modal h3{ margin:0 0 8px 0; }
+  /* NOTE: canvas is responsive via CSS; internal pixels are set in JS for crispness */
+#sigCanvas{ width:100%; height:220px; background:#fff; border:1px solid #ddd; border-radius:10px; touch-action:none }
+.sig-actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:10px; }
+.signature-group {margin-bottom: 30px;} /* Adjust this value for more/less space */ 
+
+/* Buttons */
+.btns{margin-top:24px;display:flex;justify-content:space-between;}
+button{background:var(--accent);color:#fff;border:none; padding:10px 18px;border-radius:10px; cursor:pointer;font-size:1rem;}
+button[disabled]{opacity:0.5;cursor:not-allowed;}
+button:hover{background:#006ae6;}
+button.secondary{background:#999}
+button.ghost{background:transparent;border:1px solid var(--line);color:#333}
+.actions{display:flex;gap:12px;align-items:center}
+
+/* Progress Bar */
+.progress{display:flex;gap:4px;margin-bottom:16px;}
+.dot{flex:1;height:6px;border-radius:4px;background:#ccc;}
+.dot.active{background:var(--accent);}
+
+  /* ============================================================
+    PREMIUM iOS BACK NAVIGATION ENGINE (Optimized)
+   ============================================================ */
+.back-navigation-container {max-width: 940px;margin: 20px auto 0 auto;padding: 0 24px;display: flex;align-items: center;}
+a.back-link,
+a.back-link span {text-decoration: none !important;text-decoration-line: none !important;border-bottom: none !important;box-shadow: none !important;outline: none !important;}
+a.back-link {display: inline-flex;align-items: center;gap: 2px;color:#007aff; 
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;font-weight: 400;letter-spacing: -0.3px;transition: opacity 0.15s ease;cursor: pointer;-webkit-user-select: none;user-select: none;}
+a.back-link:hover {opacity: 0.7;}
+a.back-link:active {opacity: 0.3;}
+a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff !important;fill: none; /* Ensures vector shapes don't accidentally bloat */}
+      
+
+/* Save Status */
+#saveStatus{position:fixed;top:12px;right:12px; background:var(--accent);color:#fff; padding:6px 10px;border-radius:8px; font-size:0.85rem;opacity:0;transition:opacity .25s;}
+#saveStatus.show{opacity:1;}
+
+ /* ---------- WIZARD CSS ---------- */ 
+  /* Progress Tracker Container */
+.step-indicator {display: flex;justify-content: space-between;margin-bottom: 30px;background: #fff;padding: 15px;border-radius: 12px;border: 1px solid var(--line);overflow-x: auto;gap: 10px;}
+
+ /* Individual Step Tab */
+.step {flex: 1;text-align: center;font-size: 0.8rem;color: #888;cursor: pointer;transition: all 0.2s ease-in-out;padding: 8px;border-radius: 8px;min-width: 90px;display: flex;flex-direction: column;align-items: center;}
+
+/* Hover effect for Expert users jumping around */
+.step:hover {background: #f0f7ff;color: var(--accent);}
+.step.active {color: var(--accent);font-weight: 600;background: #f0f7ff;}
+.step-num {width: 28px;height: 28px;line-height: 28px;border-radius: 50%;background: #eee;display: block;margin-bottom: 6px;font-size: 0.85rem;transition: background 0.3s;}
+.step.active .step-num {background: var(--accent);color: #fff;}
+
+/* Wizard Step Visibility */
+.wizard-step {display: none;}
+.wizard-step.active {display: block;animation: slideIn 0.3s ease-out;}
+
+@keyframes slideIn {from { opacity: 0; transform: translateX(10px); }to { opacity: 1; transform: translateX(0); }}
+
+/* Navigation Footer for Wizard */
+.wizard-actions {display: flex;justify-content: space-between;margin-top: 30px;padding: 20px 0;border-top: 1px solid var(--line);}
+
+  /* small helpers for Wizard */
+.muted-inline{ color:var(--muted); font-size:0.9rem; }
+.kbd{ background:#f1f5fb;border-radius:6px;padding:6px 8px;font-size:0.85rem;border:1px solid var(--line); }
+
+ /* PO and Insured data copy */ 
+input.locked {background:#f3f4f6; color:#777; cursor:not-allowed;}
+
+/* DATE GROUP LAYOUT */
+.row.date-group {justify-content: flex-start !important; align-items: center; gap: 8px; flex-wrap: nowrap;}
+.date-group .date-label {flex: 0 0 auto; margin: 0; margin-right: 3px; font-weight: 500; color: #333; text-align: left; white-space: nowrap;}
+.date-group .date-inputs {display: flex; flex-grow: 0; justify-content: flex-start; gap: 4px;}
+.date-group .date-inputs input {width: 3.8em; text-align: center; padding: 9px 0; border: 1px solid #ddd; border-radius: 10px; background: #fff; font-size: 1rem; line-height: 1.2; box-sizing: border-box;}
+
+ /* Styling the wrapper to look like your standard input */
+.dob-wrapper {display: flex !important;align-items: center;flex-direction: row !important;width: 100% !important;padding: 12px 10px;font-size: 16px;border: 1px solid #ccc;border-radius: 8px;background: white;box-sizing: border-box; /* Ensures padding doesn't add to width */}
+
+.dob-wrapper input {
+width: 40px !important; 
+    min-width: 40px !important;
+    max-width: 40px !important; 
+    
+    /* Remove borders and standard appearance */
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    flex: 0 0 auto !important; /* Strictly prevents growing or shrinking */
+}
+  
+#wzepp_DOB_MM_UI, 
+#wzepp_DOB_DD_UI {
+    width: 35px !important; /* Space for 2 digits */
+}
+#wzepp_DOB_YYYY_UI {
+    width: 75px !important; /* Space for 4 digits */
+}
+
+.sep {
+    padding: 0 4px;
+    color: #777;
+    user-select: none;
+}
+
+/* Force the label to stay up if the wrapper is "active" or has data */
+.dob-container.active label,
+.dob-container.has-data label {
+    top: -8px;
+    left: 10px;
+    font-size: 12px;
+    color: var(--accent);
+}
+
+.dob-wrapper:focus-within {
+    border-color: var(--accent);
+} 
+
+/* Style for the "Source of Fund" Label */
+.group-header-label {
+    display: block;
+    font-size: 14px;
+    color: #777; /* Matches your floating label color */
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.muted-info {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 12px;
+}
+
+/* Flexbox Grid for Checkboxes */
+.funds-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px 25px; /* Vertical and Horizontal spacing */
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    user-select: none;
+}
+
+.check-item input {
+    display: none; /* Hide default checkbox */
+}
+
+/* Custom Checkbox Square */
+.custom-check {
+    height: 20px;
+    width: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 8px;
+    position: relative;
+    background: white;
+    transition: all 0.2s;
+}
+
+.check-item input:checked + .custom-check {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* Checkmark Tick */
+.custom-check:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.check-item input:checked + .custom-check:after {
+    display: block;
+}  
+
+#SecSigPO {display: none;}  
+
+    /* Generate PDF Page*/
+.action-center {max-width: 800px;margin: 40px auto;padding: 0 20px; /* Provides consistent side-spacing on mobile */box-sizing: border-box;}
+.pdf-grid {display: flex;flex-direction: column;gap: 12px;}
+.doc-row {display: flex;align-items: center;justify-content: space-between;background: #ffffff;padding: 16px;border-radius: 14px;border: 1px solid #d2d2d7;box-sizing: border-box;}
+.doc-info {display: flex;flex-direction: column;}
+.doc-title { font-size: 15px; color: #1d1d1f; }
+.doc-sub { font-size: 12px; color: #86868b; }
+
+/* Generate PDF Button Styles */
+.btn-primary { background: #0071e3; color: #fff; border: none; padding: 8px 16px; border-radius: 18px; font-weight: 500; cursor: pointer; }
+.btn-secondary { background: #f5f5f7; color: #0071e3; border: none; padding: 8px 16px; border-radius: 18px; font-weight: 500; cursor: pointer; margin-right: 4px; }
+.btn-reset { background: none; color: #ff3b30; border: 1px solid #ff3b30; padding: 12px 24px; border-radius: 22px; font-weight: 600; cursor: pointer; transition: 0.2s; width: 100%; max-width: 300px; }
+.btn-secondary:focus {outline: none;background: #f5f5f7; /* Keeps the original Apple-grey background */color: #0071e3;}
+
+/* Optional: Slight darken effect ONLY while the mouse is actually held down */
+.btn-secondary:active {background: #e8e8ed; transition: 0.1s;}
+
+/* Hover effect for better UX */
+.btn-secondary:hover {background: #ebebed;}
+.reset-container {text-align: center;margin-top: 40px;padding-top: 20px;border-top: 1px solid #d2d2d7;}
+
+/* MOBILE ALIGNMENT FIX */
+@media (max-width: 600px) {
+  .doc-row {flex-direction: column;align-items: flex-start;gap: 15px;}
+  .actions {width: 100%;display: flex;justify-content: space-between;}
+  .actions button {flex: 1;text-align: center;}
+}
+</style>
+
+</head>
+<body>
+
+    <!-- Global Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <span class="logo" onclick="window.location.href='dashboard.html'">CI Pro Universe</span>
+
+            <!-- JavaScript Mobile Opener Hook -->
+            <div class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </div>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-item active">TND4 Magic Filler</a>
+            </nav>
+        </div>
+    </header>
+
+  <div class="secure-wrapper">   
+  <div id="loadingStatus">
+            <div class="spinner"></div>
+            <span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">Verifying security clearances...</span>
+        </div>    
+
+<div class="back-navigation-container">
+    <a href="javascript:history.back()" id="backToMainLink" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>Back</span>
+    </a>
+</div>
+
+ <div id="protectedContent">    
+    <main class="container">
+    
+          <section class="hero" style="padding-top: 0px; padding-bottom: 20px; text-align: left;">
+            <span class="badge">3-in-1 Combo (EPP, CC, RFC)</span>
+        </section>    
+
+<!-- Wizard top -->
+  <div class="wizard-top">
+    <!-- Progress Tracker -->
+  <div class="step-indicator" id="stepIndicator">
+    <div class="step active"><span class="step-num">1</span>Policy Owner</div>
+    <div class="step"><span class="step-num">2</span>Insured</div>
+    <div class="step"><span class="step-num">3</span>3rd Party</div>
+    <div class="step"><span class="step-num">4</span>Witness</div>
+    <div class="step"><span class="step-num">5</span>Credit Card</div>
+    <div class="step"><span class="step-num">6</span>EPP</div>
+    <div class="step"><span class="step-num">7</span>Signature</div>
+    <div class="step"><span class="step-num">8</span>Generate</div>
+  </div>
+
+
+<!-- Wizard container -->
+<div id="wizard">    
+    <!-- STEP 1: (Policy Owner) -->
+    <div class="wizard-step active">
+      <section class="section">
+      <h2>Policy Owner - details</h2>  
+      <div class="floating-label">
+      <input id="wzepp_PolicyNo" type="text" placeholder=" " required>
+      <label for="wzepp_PolicyNo">Policy Number</label>
+      </div>
+
+    <div class="floating-label">
+      <input id="wzepp_PO_Name" type="text" placeholder=" " required>
+      <label for="wzepp_PO_Name">Policy Owner Name</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_PO_NIRC" type="text" placeholder=" " required>
+      <label for="wzepp_PO_NIRC">Policy Owner NRIC/Passport No.</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_PO_Mobile" type="text" placeholder=" " required>
+      <label for="wzepp_PO_Mobile">Policy Owner Mobile No.</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_PO_Address_Country" type="text" placeholder=" " required>
+      <label for="wzepp_PO_Address_Country">Policy Owner Address: Country</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_PO_Address_State" type="text" placeholder=" " required>
+      <label for="wzepp_PO_Address_State">Policy Owner Address : State</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_PO_Address_City" type="text" placeholder=" " required>
+      <label for="wzepp_PO_Address_City">Policy Owner Address : City/Bandar</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_PO_Address_Postcode" type="text" placeholder=" " required>
+      <label for="wzepp_PO_Address_Postcode">Policy Owner Address: Postcode</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_PO_Address1" type="text" placeholder=" " required>
+      <label for="wzepp_PO_Address1">Policy Owner Address: Line 1</label>
+    </div>
+        
+      </section> 
+</div>
+
+<!-- STEP 2: Insured -->
+<div class="wizard-step">
+      <section class="section">
+    <h2>Insured - details)</h2>
+
+    <div class="checkbox-line">
+    <input id="wzepp_Insured_Checkbox" type="checkbox"><small class="muted">Tick here if Policy Owner and Insured is same person</small>
+    </div>
+    
+      <div class="floating-label">
+      <input id="wzepp_Insured_Name" type="text" placeholder=" " required>
+      <label for="wzepp_Insured_Name">Insured Name</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_Insured_NIRC" type="text" placeholder=" " required>
+      <label for="wzepp_Insured_NIRC">Insured NRIC/Passport No.</label>
+    </div>
+    </section>
+</div>
+
+<!-- STEP 3: 3rd Party Payor -->
+<div class="wizard-step">
+  <section class="section">  
+  <h2>3rd Party Payor - details</h2>
+
+   
+ <div class="checkbox-line">
+    <input id="wzepp_ThirdPP_Checkbox" type="checkbox">
+    <small class="muted">Tick here ONLY if there is a 3rd Party Payor</small>
+    </div>
+
+ <input type="checkbox" id="wzepp_SubmitNIRC_Checkbox" style="display: none;">   
+
+    <div id="ThirdPP_Info_Sec">
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_Name" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Name">3rd Party Payor Name</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_NIRC" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_NIRC">3rd Party Payor NRIC/Passport No.</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_Nationality" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Nationality">3rd Party Payor Nationality</label>
+    </div>    
+
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_Mobile" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Mobile">3rd Party Payor Mobile No.</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_Email" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Email">3rd Party Payor Email</label>
+    </div>
+
+     <div class="floating-label dob-container">
+      <div class="dob-wrapper" id="dob_wrapper">
+        <input type="text" id="wzepp_ThirdPP_DOB_MM_UI" placeholder="MM" maxlength="2" inputmode="numeric">
+        <span class="sep">/</span>
+        <input type="text" id="wzepp_ThirdPP_DOB_DD_UI" placeholder="DD" maxlength="2" inputmode="numeric">
+        <span class="sep">/</span>
+        <input type="text" id="wzepp_ThirdPP_DOB_YYYY_UI" placeholder="YYYY" maxlength="4" inputmode="numeric">
+      </div>
+      <input type="hidden" id="dob_trigger" placeholder=" " required>
+      <label>3rd Party Payor Date of Birth</label>
+    </div> 
+
+     <div class="floating-label">
+      <input id="wzepp_ThirdPP_Occupation" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Occupation">3rd Party Payor Occupation</label>
+    </div>  
+
+     <div class="floating-label">
+      <input id="wzepp_ThirdPP_Company" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Company">3rd Party Payor Name of Company</label>
+    </div>    
+
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_Business" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Business">3rd Party Payor Nature of Business</label>
+    </div>   
+
+     <div class="floating-label">
+      <input id="wzepp_ThirdPP_Income" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Income">3rd Party Payor Monthly Income(RM)</label>
+    </div>    
+
+     <div class="section"> 
+     <div class="input-group-wrapper" style="margin-top: 4px;">
+  <label class="group-header-label">Source of Fund</label>
+  <p class="muted-info">Select all that apply</p>
+  
+  <div class="funds-grid">
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Fund_Self" value="Yes">
+      <span class="custom-check"></span> Self
+    </label>
+
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Fund_Parents" value="Yes">
+      <span class="custom-check"></span> Parent(s)
+    </label>
+
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Fund_Spouse" value="Yes">
+      <span class="custom-check"></span> Spouse
+    </label>
+
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Fund_Others" value="Yes">
+      <span class="custom-check"></span> Others
+    </label>
+  </div>
+
+  <div class="floating-label" id="others_spec_wrapper" style="display: none; margin-top: 15px;">
+    <input type="text" id="wzepp_Fund_Others_Spec" placeholder=" ">
+    <label>Please specify other source of fund</label>
+  </div>
+</div> 
+</div>
+
+  <div class="section">    
+  <div class="input-group-wrapper" style="margin-top: 4px;">
+  <label class="group-header-label">Source of Wealth</label>
+  <p class="muted-info">Select all that apply</p>
+  
+  <div class="funds-grid">
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Wealth_Employment" value="Yes">
+      <span class="custom-check"></span> Employment or Business
+    </label>
+
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Wealth_Investment" value="Yes">
+      <span class="custom-check"></span> Investment
+    </label>
+
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Wealth_Savings" value="Yes">
+      <span class="custom-check"></span> Savings
+    </label>
+
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Wealth_Inheritance" value="Yes">
+      <span class="custom-check"></span> Inheritance
+    </label>
+
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Wealth_Parents" value="Yes">
+      <span class="custom-check"></span> Parent(s)
+    </label>
+
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Wealth_Spouse" value="Yes">
+      <span class="custom-check"></span> Spouse
+    </label>
+
+    <label class="check-item">
+      <input type="checkbox" id="wzepp_Wealth_Others" value="Yes">
+      <span class="custom-check"></span> Others
+    </label>
+  </div>
+
+  <div class="floating-label" id="wealth_others_spec_wrapper" style="display: none; margin-top: 15px;">
+    <input type="text" id="wzepp_Wealth_Others_Spec" placeholder=" ">
+    <label>Please specify other source of wealth</label>
+  </div>
+</div> 
+  </div>    
+      
+    <div class="checkbox-line">
+      <input id="wzepp_ThirdPP_Address" type="checkbox">
+      <small class="muted">Correspondence Address: Tick here if same as Policy Owner</small>
+    </div>
+
+    <div id="ThirdPP_Address_Sec">
+
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_Address_Country" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Address_Country">3rd Party Payor Address: Country</label>
+    </div>   
+
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_Address_State" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Address_State">3rd Party Payor Address: State</label>
+    </div>   
+
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_Address_City" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Address_City">3rd Party Payor Address: City/Bandar</label>
+    </div> 
+
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_Address_Postcode" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Address_Postcode">3rd Party Payor Address: Postcode</label>
+    </div>    
+      
+    <div class="floating-label">
+      <input id="wzepp_ThirdPP_Address1" type="text" placeholder=" " required>
+      <label for="wzepp_ThirdPP_Address1">3rd Party Payor Address: Line 1</label>
+    </div>
+
+    </div>
+    </div>
+
+  </section>
+</div>   
+
+<!-- STEP 4: Witness Info -->
+<div class="wizard-step">
+  <section class="section">  
+  <h2>Witness - Basic Information</h2> 
+
+  <div class="floating-label">
+      <input id="wzepp_Agent_Name" type="text" placeholder=" " required>
+      <label for="wzepp_Agent_Name">Agent Name</label>
+    </div>
+
+    <div class="floating-label">
+      <input id="wzepp_Agent_NIRC" type="text" placeholder=" " required>
+      <label for="wzepp_Agent_NIRC">Agent NRIC/Passport No.</label>
+    </div>
+
+
+  </section>   
+</div> 
+
+<!-- STEP 5: Credit Card -->
+<div class="wizard-step">
+  <section class="section">  
+  <h2>Credit Card - Basic Information</h2>   
+
+      <div class="floating-label">
+      <input id="wzepp_Card_Name" type="text" placeholder=" " readonly>
+      <label for="wzepp_Card_Name"">Card Holder Name</label>
+    </div>
+
+     <div class="row"></div>
+        <div class="expiry-field">
+      <select id="wzepp_Relationship" value="">
+        <option value="" disabled selected hidden></option>
+        <option value="wzepp_Card_Ownself">OWNSELF</option>
+        <option value="wzepp_Card_Spouse">SPOUSE</option>
+        <option value="wzepp_Card_Children">CHILDREN</option>
+        <option value="wzepp_Card_Parents">PARENTS</option>
+        <option value="wzepp_Card_Grandparents">GRANDPARENTS</option>
+        <option value="wzepp_Card_Siblings">SIBLINGS</option>
+        <option value="wzepp_Card_Employer">EMPLOYER/EMPLOYEE</option>
+      </select>
+      <label for="wzepp_Relationship">Relationship of Card Holder with Policy Owner</label>
+    </div>
+
+      <div class="row"></div>
+        <div class="expiry-field">
+      <select id="wzepp_Card_Type" value="">
+        <option value="" disabled selected hidden></option>
+        <option value="wzepp_Card_Visa">VISA</option>
+        <option value="wzepp_Card_Master">MASTER</option>
+      </select>
+      <label for="wzepp_Card_Type">Card Type</label>
+    </div>
+
+    <!-- Hardcoded to checked and hidden from view -->
+<input type="checkbox" id="wzepp_Card_Checkbox" checked style="display: none;">
+     
+     <div class="card-number-block">
+      <label>Card Number</label>
+      <small>Type 4 digits per box. Paste full 16-digit number — it will auto-split.</small>
+      <div class="card-number-inputs">
+        <input class="card-digit" id="wzepp_Card_Set1" maxlength="4" inputmode="numeric" pattern="\d*">
+        <input class="card-digit" id="wzepp_Card_Set2" maxlength="4" inputmode="numeric" pattern="\d*">
+        <input class="card-digit" id="wzepp_Card_Set3" maxlength="4" inputmode="numeric" pattern="\d*">
+        <input class="card-digit" id="wzepp_Card_Set4" maxlength="4" inputmode="numeric" pattern="\d*">
+      </div>
+    </div>
+    
+
+     <div class="expiry-field">
+      <select id="wzepp_Card_Bank" value="">
+        <option value="" disabled selected hidden></option>
+        <option value="wzepp_Card_MBB">MAYBANK</option>
+        <option value="wzepp_Card_PBB">PUBLIC BANK</option>
+        <option value="wzepp_Card_UOB">UOB</option>
+        <option value="wzepp_Card_CIMB">CIMB</option>
+        <option value="wzepp_Card_HLB">HONG LEONG BANK</option>
+        <option value="wzepp_Card_HSBC">HSBC</option>
+        <option value="wzepp_Card_ALLIANCE">ALLIANCE BANK</option>
+        <option value="wzepp_Card_STANDCHART">STANDARD CHARTERED</option>
+      </select>
+      <label for="EPPPlan">Card Issuing Bank</label>
+    </div>
+    
+<div class="expiry-row">
+  <div class="expiry-field">
+    <select id="wzepp_Card_ExpMonth" value="">
+      <option value="" disabled selected></option>
+      <option value="01">01</option>
+      <option value="02">02</option>
+      <option value="03">03</option>
+      <option value="04">04</option>
+      <option value="05">05</option>
+      <option value="06">06</option>
+      <option value="07">07</option>
+      <option value="08">08</option>
+      <option value="09">09</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+    </select>
+    <label for="expMonth">Expiry Month</label>
+  </div>
+
+  <div class="expiry-field">
+    <select id="wzepp_Card_ExpYear" value="">
+      <option value="" disabled selected></option>
+      <option value="2025">2025</option><option value="2026">2026</option>
+      <option value="2027">2027</option><option value="2028">2028</option>
+      <option value="2029">2029</option><option value="2030">2030</option>  
+      <option value="2031">2031</option><option value="2032">2032</option>
+      <option value="2033">2033</option><option value="2034">2034</option>
+      <option value="2035">2035</option><option value="2036">2036</option>
+      <option value="2037">2037</option><option value="2038">2038</option>
+      <option value="2039">2039</option><option value="2040">2040</option>
+    </select>
+    <label for="wzepp_Card_ExpYear">Expiry Year</label>
+  </div>
+</div>
+
+  </section>
+
+  <section class="section">
+  <h2>Request For</h2>  
+  <div class="checkbox-line">
+    <input id="wzepp_CCRequest_Checkbox" type="checkbox"><small class="muted">Yes! I wish to pay insurance premium through recurring credit/debit card service and agree to abide by the Terms & Conditions as specified overleaf. </small>
+    </div>
+  </section>
+
+    <section class="section">
+  <h2>Notice on Personal Data and Privacy</h2>  
+  <div class="checkbox-line">
+    <input id="wzepp_PDPA_Checkbox" type="checkbox"><small class="muted">I have read the Company’s Notice on Personal Data and Privacy and hereby consent to the processing of my personal data in
+accordance with the Company’s Notice on Personal Data and Privacy as set out in the Company’s website
+(https://www.manulife.com.my/en/individual/privacy-policy.html). </small>
+    </div>
+  </section>
+</div>  
+
+<!-- STEP 6: EPP -->
+<div class="wizard-step">
+  <section class="section">  
+  <h2>EPP Options</h2> 
+
+  <div class="floating-label">
+  <input id="wzepp_Payment_Premium" type="text" placeholder=" " required>
+  <label for="wzepp_Payment_Premium">First Premium Amount (RM)</label>
+  </div>
+    
+    
+  <div class="expiry-row">
+    <div class="expiry-field">
+    <select id="wzepp_Card_EppOption" value="">
+      <option value="" disabled selected></option>
+      <option value="wzepp_Card_EppOption_6M">6 MONTHS</option>
+      <option value="wzepp_Card_EppOption_12M">12 MONTHS</option>
+    </select>
+    <label for="wzepp_Card_EppOption">EPP  Options</label>
+  </div>
+  </div>
+
+     <div class="expiry-row">
+    <div class="expiry-field">
+    <select id="wzepp_Card_AfterEPP" value="">
+      <option value="" disabled selected></option>
+      <option value="wzepp_Card_AfterEPP_Monthly">MONTHLY</option>
+      <option value="wzepp_Card_AfterEPP_Quarterly">QUARTERLY</option>
+       <option value="wzepp_Card_AfterEPP_Halfyearly">HALF-YEARLY</option>
+      <option value="wzepp_Card_AfterEPP_Yearly">YEARLY</option>
+    </select>
+    <label for="wzepp_Card_AfterEPP">Payment Frequency after EPP Ended</label>
+    <small class="muted">Follow payment fequency in PI</small>
+  </div>
+     </div>
+
+  <div style="display: none;">
+    <input type="text" id="wzepp_EPP_Cardholder_Name">
+    <input type="text" id="wzepp_EPP_Cardholder_NIRC">
+    <input type="text" id="wzepp_EPP_Cardholder_Mobile">
+</div>  
+
+  </section>    
+</div> 
+
+
+<!-- STEP 7: Signature -->
+<div class="wizard-step">
+  
+  <section class="section">
+  <h2>Signed at/ Signed on</h2>  
+  <div class="expiry-row">
+  <div class="expiry-field">
+    <select id="wzepp_Sign_State" value="">
+      <option value="" disabled selected></option>
+      <option value="SELANGOR">SELANGOR</option>
+      <option value="K.LUMPUR">K.LUMPUR</option>
+      <option value="MELAKA">MELAKA</option>
+      <option value="JOHOR">JOHOR</option>
+      <option value="N.SEMBILAN">N.SEMBILAN</option>
+      <option value="PENANG">PENANG</option>
+      <option value="PERAK">PERAK</option>
+      <option value="SABAH">SABAH</option>
+      <option value="SARAWAK">SARAWAK</option>
+      <option value="KELANTAN">KELANTAN</option>
+      <option value="PERLIS">PERLIS</option>
+      <option value="T'GANU">T'GANU</option>
+      <option value="PAHANG">PAHANG</option>
+      <option value="KEDAH">KEDAH</option>
+    </select>
+    <label for="zepp_Sign_State">State</label>
+  </div>
+  </div>
+
+    <div class="expiry-row"> 
+  <div class="expiry-field">
+    <select id="wzepp_Sign_Day" value="">
+      <option value="" disabled selected></option>
+      <option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option>
+      <option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option>
+      <option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+      <option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option>
+      <option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+      <option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option>
+      <option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option>
+      <option value="29">29</option><option value="30">30</option><option value="31">31</option>
+    </select>
+    <label for="wzepp_Sign_Day">Day</label>
+  </div>
+    
+
+  <div class="expiry-field">
+    <select id="wzepp_Sign_Month" value="">
+      <option value="" disabled selected></option>
+      <option value="JANUARY">JANUARY</option><option value="FEBRUARY">FEBRUARY</option><option value="MARCH">MARCH</option><option value="APRIL">APRIL</option>
+      <option value="MAY">MAY</option><option value="JUNE">JUNE</option><option value="JULY">JULY</option><option value="AUGUST">AUGUST</option>
+      <option value="SEPTEMBER">SEPTEMBER</option><option value="OCTOBER">OCTOBER</option><option value="NOVEMBER">NOVEMBER</option><option value="DECEMBER">DECEMBER</option>
+    </select>
+   <label for="zepp_Sign_Month">Month</label> 
+  </div>
+
+     <div class="expiry-field">
+    <select id="wzepp_Sign_Year" value="">
+      <option value="" disabled selected></option>
+      <option value="2025">2026</option><option value="2026">2027</option>
+    </select>
+    <label for="wzepp_Sign_Year">Year</label>   
+  </div>   
+  
+  </div>      
+  </section>  
+  
+  
+  <section class="section">  
+  
+    <div class="signature-group" id="SecSigCardHolder">
+    <h2>Signature of Card Holder</h2>   
+    <div class="sig-preview" id="preview_cardholder" onclick="openSig('cardholder')">
+      <span>Tap to Sign (Card Holder)</span>
+    </div>
+    <div class="row">
+      <button id="clear_cardholder" class="secondary" type="button" onclick="clearSpecificSig('cardholder')">Clear Signature</button>
+    </div>
+    </div>  
+
+    <div class="signature-group" id="SecSigPO">
+    <h2>Signature of Policy Owner</h2>  
+    <div class="sig-preview" id="preview_owner" onclick="openSig('owner')">
+      <span>Tap to Sign (Policy Owner)</span>
+    </div>
+    <div class="row">
+      <button id="clear_owner" class="secondary" type="button" onclick="clearSpecificSig('owner')">Clear Signature</button>
+    </div>
+    </div>  
+
+    <div class="signature-group" id="SecSigWitness">
+    <h2>Signature of Witness</h2>
+    <div class="sig-preview" id="preview_witness" onclick="openSig('witness')">
+      <span>Tap to Sign (Witness)</span>
+    </div>
+    <div class="row">
+      <button id="clear_witness" class="secondary" type="button" onclick="clearSpecificSig('witness')">Clear Signature</button>
+    </div>
+    </div>  
+    
+  </section>
+</div>
+
+<div class="wizard-step">
+  <section class="section">
+    <div class="action-center">
+      <div class="pdf-grid">
+        <!-- Form 1 -->
+        <div class="doc-row">
+          <div class="doc-info">
+            <b class="doc-title">Credit Card Enrolment</b>
+            <span class="doc-sub">LF4092 · 4 Pages (email to MYNB)</span>
+          </div>
+          <div class="actions">
+            <button onclick="fillPDF('Credit Card Enrolment Form_LF4092_200524_fillable.pdf', 'view')" class="btn-secondary">View</button>
+            <button onclick="fillPDF('Credit Card Enrolment Form_LF4092_200524_fillable.pdf', 'download')" class="btn-primary">Download</button>
+          </div>
+        </div>
+
+        <!-- Form 2 -->
+        <div class="doc-row">
+          <div class="doc-info">
+            <b class="doc-title">Zero Interest Easy Payment Plan</b>
+            <span class="doc-sub">LF1739 · 2 Page (email to MYNB)</span>
+          </div>
+          <div class="actions">
+            <button onclick="fillPDF('Zero Interest Easy Payment Plan Form_LF1739_fillable.pdf', 'view')" class="btn-secondary">View</button>
+            <button onclick="fillPDF('Zero Interest Easy Payment Plan Form_LF1739_fillable.pdf', 'download')" class="btn-primary">Download</button>
+          </div>
+        </div>
+
+        <!-- Form 3 -->
+        <div class="doc-row">
+          <div class="doc-info">
+            <b class="doc-title">Amendment to Application</b>
+            <span class="doc-sub">LF1042 · 1 Page (upload into EPOS)</span> <!-- Cleaned up subtitle -->
+          </div>
+          <div class="actions">
+            <!-- FIXED SYNTAX BELOW -->
+            <button onclick="fillPDF('Amendment to Application_forEPP_LF1042_fillable.pdf', 'view')" class="btn-secondary">View</button>
+            <button onclick="fillPDF('Amendment to Application_forEPP_LF1042_fillable.pdf', 'download')" class="btn-primary">Download</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="reset-container">
+        <button onclick="resetAllData()" class="btn-reset">Reset All Fields & Signatures</button>
+      </div>
+    </div> <!-- Close action-center -->
+  </section>
+</div>
+
+
+
+</div> <!-- end wizard -->
+
+<!-- Global nav -->
+    <!-- NAVIGATION BUTTONS -->
+    <div class="wizard-actions">
+      <button type="button" id="prevBtn" class="ghost" onclick="changeStep(-1)" style="visibility:hidden;">Previous</button>
+      <button type="button" id="nextBtn" onclick="changeStep(1)">Next Step</button>
+    </div>
+
+       <section class="security" style="padding: 0 0 60px 0;">
+            <div class="security-box">
+                <strong>Secured Session Active:</strong> This platform operates on a static, local-injection framework. We do not store, log, or track any personal details or financial credentials on external servers.
+            </div>
+    </section>  
+      
+</main>    
+ </div></div>
+   
+    
+    <footer class="footer">
+        &copy; 2026 CI Pro Universe Portal. All rights reserved. Built for CI Pro operations.
+    </footer>    
+
+<!-- Signature Modal -->
+<div id="sigModal" class="sig-modal" aria-hidden="true">
+  <div class="box">
+    <h3 id="sigModalTitle">Draw Signature</h3>
+    <canvas id="sigCanvas"></canvas>
+    <div class="sig-actions">
+      <button id="sigDone" type="button">Done</button>
+      <button id="sigClear" type="button" class="ghost">Clear</button>
+      <button id="sigCancel" type="button" class="secondary">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="saveStatus">Saved</div>  
+
+<script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        const SUPABASE_URL = "https://qotxxqwikxpsjnjddoqm.supabase.co"; 
+        const SUPABASE_ANON_KEY = "sb_publishable_xpWOcimLjRbH2dbeRdoBSg_XddyOqYU";    
+        
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Global Logout Function
+        window.handleLogout = async function() {
+            try {
+                await supabase.auth.signOut();
+            } catch (err) {
+                console.error("Error during sign out:", err);
+            } finally {
+                window.location.href = "../login.html";
+            }
+        };
+
+        // TND4 Role Security Gatekeeper
+        async function checkPageAccess() {
+            try {
+                const { data: { user }, error: authError } = await supabase.auth.getUser();
+                
+                if (authError || !user) {
+                    window.location.href = "../login.html";
+                    return;
+                }
+
+                // Fetch user profile row from database
+                const { data: profile, error: profileError } = await supabase
+                    .from('user_profiles')
+                    .select('access_role')
+                    .eq('id', user.id)
+                    .single();
+
+                // 🛑 SCREENING RULE: Bounce anyone who isn't admin or tnd4
+                if (profileError || (profile?.access_role !== 'admin' && profile?.access_role !== 'tnd4')) {
+                    alert("Access Denied: TND4 Clearance Level Required.");
+                    window.location.href = "../login.html"; 
+                    return;
+                }
+
+                // 🎉 SUCCESS: Transition out the frosted-glass barrier smoothly
+                const overlay = document.getElementById('loadingStatus');
+                if (overlay) {
+                    overlay.style.opacity = '0';
+                    overlay.style.visibility = 'hidden';
+                    
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 400); 
+                }
+            } catch (globalErr) {
+                console.error("System structural error:", globalErr);
+                window.location.href = "../login.html";
+            }
+        }
+
+        // 🚀 Initialize verification loop cleanly on entry
+        checkPageAccess();
+    </script>    
+  
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>  
+
+<script>
+
+/* ============================================================
+   1. GLOBAL CONFIGURATION & MAPPING
+   ============================================================ */
+const PDF_MAPPING_LOGIC = {
+    // --- FORM 1: CREDIT CARD ENROLMENT ---
+    "Credit Card Enrolment Form_LF4092_200524_fillable.pdf": {
+        fields: {
+            "CCAgree": "wzepp_CCRequest_Checkbox",
+            "PolicyNo1": "wzepp_PolicyNo",
+            "Insured1": "wzepp_Insured_Name",
+            "Relationship1_Ownself": "wzepp_Card_Ownself",
+            "Relationship1_spouse": "wzepp_Card_Spouse",
+            "Relationship1_children": "wzepp_Card_Children",
+            "Relationship1_Parent": "wzepp_Card_Parents",
+            "Relationship1_Grandparent": "wzepp_Card_Grandparents",
+            "Relationship1_Sibling": "wzepp_Card_Siblings",
+            "Relationship1_Company": "wzepp_Card_Employer",
+            "CardName": "wzepp_Card_Name",
+            "CC_Tick": "wzepp_Card_Checkbox",
+            "Visa_Tick": "wzepp_Card_Visa",
+            "Master_Tick": "wzepp_Card_Master",
+            "CardNo_1": "wzepp_Card_No_1", "CardNo_2": "wzepp_Card_No_2",
+            "CardNo_3": "wzepp_Card_No_3", "CardNo_4": "wzepp_Card_No_4",
+            "CardNo_5": "wzepp_Card_No_5", "CardNo_6": "wzepp_Card_No_6",
+            "CardNo_7": "wzepp_Card_No_7", "CardNo_8": "wzepp_Card_No_8",
+            "CardNo_9": "wzepp_Card_No_9", "CardNo_10": "wzepp_Card_No_10",
+            "CardNo_11": "wzepp_Card_No_11", "CardNo_12": "wzepp_Card_No_12",
+            "CardNo_13": "wzepp_Card_No_13", "CardNo_14": "wzepp_Card_No_14",
+            "CardNo_15": "wzepp_Card_No_15", "CardNo_16": "wzepp_Card_No_16",
+            "CardExpry_M1": "wzepp_Card_Exp_M1", "CardExpry_M2": "wzepp_Card_Exp_M2",
+            "CardExpry_Y1": "wzepp_Card_Exp_Y1", "CardExpry_Y2": "wzepp_Card_Exp_Y2",
+            "CardBank": "wzepp_Card_Bank_Text",
+            "ThirdPP_Yes": "wzepp_ThirdPP_Checkbox",
+            "ThirdPP_SubmittedNRIC": "wzepp_SubmitNIRC_Checkbox",
+            "ThirdPP_Name": "wzepp_ThirdPP_Name",
+            "ThirdPP_NIRC": "wzepp_ThirdPP_NIRC",
+            "ThirdPP_DOB_DD": "wzepp_ThirdPP_DOB_DD",
+            "ThirdPP_DOB_MM": "wzepp_ThirdPP_DOB_MM",
+            "ThirdPP_DOB_YYYY": "wzepp_ThirdPP_DOB_YYYY",
+            "ThirdPP_Nationality": "wzepp_ThirdPP_Nationality",
+            "ThirdPP_CorrespAdd_Line1": "wzepp_CC_Short_Address",
+            "ThirdPP_CorrrepAdd_Postcode": "wzepp_ThirdPP_Address_Postcode",
+            "ThirdPP_CorrespAdd_Country": "wzepp_ThirdPP_Address_Country",
+            "ThirdPP_Email": "wzepp_ThirdPP_Email",
+            "ThirdPP_Phone": "wzepp_ThirdPP_Mobile",
+            "ThirdPP_Occupation": "wzepp_ThirdPP_Occupation",
+            "ThirdPP_Employer": "wzepp_ThirdPP_Company",
+            "ThirdPP_NatureBusiness": "wzepp_ThirdPP_Business",
+            "ThirdPP_Income": "wzepp_ThirdPP_Income",
+            "ThirdPP_SourceFund_Self": "wzepp_Fund_Self",
+            "ThirdPP_SourceFund_Parent": "wzepp_Fund_Parents",
+            "ThirdPP_SourceFund_Spouse": "wzepp_Fund_Spouse",
+            "ThirdPP_SourceFund_Others": "wzepp_Fund_Others",
+            "ThirdPP_SourceFund_Others_Write": "wzepp_Fund_Others_Spec",
+            "ThirdPP_SourceWealth_EmployBus": "wzepp_Wealth_Employment",
+            "ThirdPP_SourceWealth_Invest": "wzepp_Wealth_Investment",
+            "ThirdPP_SourceWealth_Inherit": "wzepp_Wealth_Inheritance",
+            "ThirdPP_SourceWealth_Savings": "wzepp_Wealth_Savings",
+            "ThirdPP_SourceWealth_Parents": "wzepp_Wealth_Parents",
+            "ThirdPP_SourceWealth_Spouse": "wzepp_Wealth_Spouse",
+            "ThirdPP_SourceWealth_Others": "wzepp_Wealth_Others",
+            "ThirdPP_SourceWealth_Others_Write": "wzepp_Wealth_Others_Spec",
+            "PDPA": "wzepp_PDPA_Checkbox",
+            "Sign_State": "wzepp_Sign_State",
+            "Sign_Date": "wzepp_Sign_Day",
+            "Sign_Month": "wzepp_Sign_Month",
+            "Sign_Year": "wzepp_Sign_Year"
+        },
+        conditionalFields: {
+            "ownself": {
+                "Sign_OwnerName": "wzepp_PO_Name",
+                "Sign_OwnerNIRC": "wzepp_PO_NIRC"
+            },
+            "third_party": {
+                "Sign_OwnerName": "wzepp_PO_Name",
+                "Sign_OwnerNIRC": "wzepp_PO_NIRC",
+                "Sign_PayorName": "wzepp_ThirdPP_Name",
+                "Sign_PayorNIRC": "wzepp_ThirdPP_NIRC"
+            }
+        },
+        signatureLayouts: {
+            "ownself": [
+                { id: "wzepp_sig_cardholder", page: 2, posX: 50, posY: 490, factor: 0.40 }
+            ],
+            "third_party": [
+                { id: "wzepp_sig_owner", page: 2, posX: 50, posY: 490, factor: 0.40 },
+                { id: "wzepp_sig_cardholder", page: 2, posX: 370, posY: 490, factor: 0.40 }
+            ]
+        }
+    },
+
+    // --- FORM 2: EPP PAYMENT FORM ---
+    "Zero Interest Easy Payment Plan Form_LF1739_fillable.pdf": {
+        fields: {
+            "Payor_Name": "wzepp_Card_Name",
+            "Cardholder_NIRC": "wzepp_EPP_Cardholder_NIRC",
+            "Cardholder_MobileNo": "wzepp_EPP_Cardholder_Mobile",
+            "Cardholder_MailingAdd_Line1": "wzepp_EPP_Full_Address_Line",
+            "Paymentfor_PolicyNo1": "wzepp_PolicyNo",
+            "Paymentfor_PolicyNo1_OwnerName": "wzepp_PO_Name",
+            "Paymentfor_PolicyNo1_Relationship": "wzepp_Relationship",
+            "Cardholder_Name": "wzepp_Card_Name",
+            "Visa": "wzepp_Card_Visa",
+            "Master": "wzepp_Card_Master",
+            "CC_Number": "wzepp_Card_Combine",
+            "CC_Expirydate": "wzepp_Card_Exp_Combine",
+            "CC_Bank_MBB": "wzepp_Card_MBB",
+            "CC_Bank_PBB": "wzepp_Card_PBB",
+            "CC_Bank_UOB": "wzepp_Card_UOB",
+            "CC_Bank_HSBC": "wzepp_Card_HSBC",
+            "CC_Bank_CIMB": "wzepp_Card_CIMB",
+            "CC_Bank_Alliance": "wzepp_Card_ALLIANCE",
+            "CC_Bank_HLB": "wzepp_Card_HLB",
+            "CC_Bank_StanChart": "wzepp_Card_STANDCHART",
+            "EPPTerm_6Months": "wzepp_Card_EppOption_6M",
+            "EPPTerm_12Months": "wzepp_Card_EppOption_12M",
+            "AfterEPP_Annually": "wzepp_Card_AfterEPP_Yearly",
+            "AfterEPP_Halfyearly": "wzepp_Card_AfterEPP_Halfyearly",
+            "AfterEPP_Quarterly": "wzepp_Card_AfterEPP_Quarterly",
+            "AfterEPP_Monthly": "wzepp_Card_AfterEPP_Monthly",  
+            "Paymentfor_PolicyNo1_FirstPremium": "wzepp_Payment_Premium",
+            "Signed_State": "wzepp_Sign_State",
+            "Signed_Day": "wzepp_Sign_Day",
+            "Signed_Month": "wzepp_Sign_Month",
+            "Signed_Year": "wzepp_Sign_Year",
+            "Witness_Name": "wzepp_Agent_Name",
+            "Witness_NRIC": "wzepp_Agent_NIRC"
+        },
+        signatureLayouts: {
+            "ownself": [
+                { id: "wzepp_sig_cardholder", page: 1, posX: 30, posY: 100, factor: 0.40 },
+                { id: "wzepp_sig_witness", page: 1, posX: 340, posY: 100, factor: 0.40 }
+            ],
+            "third_party": [
+                { id: "wzepp_sig_cardholder", page: 1, posX: 30, posY: 100, factor: 0.40 },
+                { id: "wzepp_sig_witness", page: 1, posX: 340, posY: 100, factor: 0.40 }
+            ]
+        }
+    },
+
+    // --- FORM 3: NB RFC (AMENDMENT) ---
+    "Amendment to Application_forEPP_LF1042_fillable.pdf": {
+        fields: {
+            "PolicyNo": "wzepp_PolicyNo",
+            "LifeProposed_Name": "wzepp_Insured_Name",
+            "LifeProposed_NRIC": "wzepp_Insured_NIRC",
+            "Signed_State": "wzepp_Sign_State",
+            "Signed_Day": "wzepp_Sign_Day",
+            "Signed_Month": "wzepp_Sign_Month",
+            "Signed_Year": "wzepp_Sign_Year",
+            "Sign_LifeProposedPO_Name": "wzepp_PO_Name",
+            "Sign_LifeProposedPO_NRIC": "wzepp_PO_NIRC",
+            "Sign_LifeProposedPO_Mobile": "wzepp_PO_Mobile", // FIXED QUOTE ERROR HERE
+            "Sign_Witness_Name": "wzepp_Agent_Name",
+            "Sign_Witness_NRIC": "wzepp_Agent_NIRC"
+        },
+        signatureLayouts: {
+            "ownself": [
+                { id: "wzepp_sig_cardholder", page: 0, posX: 380, posY: 145, factor: 0.40 },
+                { id: "wzepp_sig_witness", page: 0, posX: 50, posY: 145, factor: 0.40 }
+            ],
+            "third_party": [
+                { id: "wzepp_sig_owner", page: 0, posX: 380, posY: 145, factor: 0.40 },
+                { id: "wzepp_sig_witness", page: 0, posX: 50, posY: 145, factor: 0.40 }
+            ]
+        }
+    }
+};
+
+
+  /* ---SAVE STATUS + LOCALSTORAGE (Text, Checkbox, Dropdown) ---------- */
+const saveStatusEl = document.getElementById("saveStatus");
+
+function showSaveStatus(){
+  saveStatusEl.style.opacity = 1;
+  clearTimeout(saveStatusEl._timer);
+  saveStatusEl._timer = setTimeout(()=> saveStatusEl.style.opacity = 0, 1200);
+}
+
+function saveElValue(el){
+  localStorage.setItem(el.id, el.value);
+  showSaveStatus();
+}
+
+function autoBindSave(el) {
+  const saved = localStorage.getItem(el.id);
+
+  // Restore
+  if (el.type === "checkbox") {
+    if (saved !== null) el.checked = (saved === "true");
+  } else if (el.type === "radio") {
+    const savedRadioValue = localStorage.getItem(el.name);
+    if (savedRadioValue) {
+      el.checked = (el.id === savedRadioValue);
+    }
+  } else if (saved !== null) {
+    el.value = saved;
+  }
+
+  // Bind save
+  if (el.tagName === "SELECT") {
+    el.addEventListener("change", () => saveElValue(el));
+  } else if (el.type === "checkbox") {
+    el.addEventListener("change", () => {
+      localStorage.setItem(el.id, el.checked);
+      showSaveStatus();
+    });
+  } else if (el.type === "radio") {
+    el.addEventListener("change", () => {
+      if (el.checked) {
+        localStorage.setItem(el.name, el.id); // store under group name
+        showSaveStatus();
+      }
+    });
+} else {
+  el.addEventListener("input", () => {
+    if (el.id !== "wzepp_ThirdPP_Email") { //except Email
+      el.value = el.value.toUpperCase();   // update textbox itself
+    }
+    localStorage.setItem(el.id, el.value);
+    showSaveStatus();
+  });
+}
+}
+
+  
+/* ---------- UNIVERSAL HELPER FUNCTION ---------- */
+
+function safeSetField(form, fieldName, value) {
+  if (value === null || value === undefined || value === "") return;
+
+  try {
+    const field = form.getField(fieldName);
+
+    // TEXT FIELDS
+    if (field instanceof PDFLib.PDFTextField) {
+      // Keep original case for email, uppercase for everything else
+      const textVal = (fieldName.toLowerCase().includes("email")) ? value : value.toUpperCase();
+      field.setText(textVal);
+    } 
+    
+    // CHECKBOXES (Handles "true", "Yes", or the actual ID match)
+    else if (field instanceof PDFLib.PDFCheckBox) {
+      if (value === true || value === "true" || value === "Yes" || value === "checked") {
+        field.check();
+      } else {
+        field.uncheck();
+      }
+    }
+
+    // DROPDOWNS / RADIO GROUPS
+    else if (field instanceof PDFLib.PDFDropdown || field instanceof PDFLib.PDFRadioGroup) {
+      field.select(value);
+    }
+
+  } catch (err) {
+    console.warn(`Field "${fieldName}" not found or error occurred:`, err.message);
+  }
+}
+
+
+// Add this line to the bottom of your <script> block
+// (after all function definitions and before the final closing tag)
+document.querySelectorAll('input, select, textarea').forEach(autoBindSave);
+
+
+/* ---------- Policy Owner - Insured data copy Helper ---------- */  
+document.addEventListener("DOMContentLoaded", () => {
+  const samePersonCheckbox = document.getElementById("wzepp_Insured_Checkbox");
+
+  const poName  = document.getElementById("wzepp_PO_Name");
+  const poNric  = document.getElementById("wzepp_PO_NIRC");
+
+  const insuredName = document.getElementById("wzepp_Insured_Name");
+  const insuredNric = document.getElementById("wzepp_Insured_NIRC");
+
+  function syncInsuredFromPO() {
+    insuredName.value = poName.value;
+    insuredNric.value = poNric.value;
+
+    // Save to localStorage so it persists
+    localStorage.setItem(insuredName.id, insuredName.value);
+    localStorage.setItem(insuredNric.id, insuredNric.value);
+  }
+
+  function setInsuredLocked(locked) {
+    insuredName.readOnly = locked;
+    insuredNric.readOnly = locked;
+
+    insuredName.classList.toggle("locked", locked);
+    insuredNric.classList.toggle("locked", locked);
+  }
+
+  function handleCheckboxChange() {
+    if (samePersonCheckbox.checked) {
+      syncInsuredFromPO();
+      setInsuredLocked(true);
+    } else {
+      setInsuredLocked(false);
+    }
+  }
+
+  // Keep insured fields in sync if PO changes while checked
+  poName.addEventListener("input", () => {
+    if (samePersonCheckbox.checked) syncInsuredFromPO();
+  });
+
+  poNric.addEventListener("input", () => {
+    if (samePersonCheckbox.checked) syncInsuredFromPO();
+  });
+
+  samePersonCheckbox.addEventListener("change", handleCheckboxChange);
+
+  // Restore state on page reload
+  if (samePersonCheckbox.checked) {
+    handleCheckboxChange();
+  }
+});
+  
+
+/* ---------- 3RD Party Payor & Address Sync ---------- */  
+document.addEventListener("DOMContentLoaded", () => {
+    const thirdPPCheckbox = document.getElementById("wzepp_ThirdPP_Checkbox");
+    const thirdPPInfoSec  = document.getElementById("ThirdPP_Info_Sec");
+    const thirdPPAddrChk  = document.getElementById("wzepp_ThirdPP_Address");
+    const secSigPO = document.getElementById("SecSigPO");
+
+    // Mapping for Policy Owner (PO)
+    const poAddr = {
+        ct: document.getElementById("wzepp_PO_Address_Country"),
+        st: document.getElementById("wzepp_PO_Address_State"),
+        cy: document.getElementById("wzepp_PO_Address_City"),
+        pc: document.getElementById("wzepp_PO_Address_Postcode"),
+        a1: document.getElementById("wzepp_PO_Address1")
+    };
+
+    // Mapping for 3rd Party Payor (PP)
+    const ppAddr = {
+        ct: document.getElementById("wzepp_ThirdPP_Address_Country"),
+        st: document.getElementById("wzepp_ThirdPP_Address_State"),
+        cy: document.getElementById("wzepp_ThirdPP_Address_City"),
+        pc: document.getElementById("wzepp_ThirdPP_Address_Postcode"),
+        a1: document.getElementById("wzepp_ThirdPP_Address1")
+    };
+
+    /**
+     * Helper: Creates the shortened address (Line 1, City, State)
+     */
+    function syncShortAddress(source) {
+        if (!source || !source.a1) return "";
+
+        const parts = [
+            source.a1.value ? source.a1.value.trim() : "",
+            source.cy.value ? source.cy.value.trim() : "",
+            source.st.value ? source.st.value.trim() : ""
+        ].filter(part => part.length > 0);
+
+        const shortString = parts.join(", ").toUpperCase();
+        
+        // This key is used in your PDF_MAPPING_LOGIC
+        localStorage.setItem("wzepp_CC_Short_Address", shortString);
+        console.log("Debug - Short Address Updated:", shortString); 
+        return shortString;
+    }
+
+   /**
+     * 1. Build Full EPP Address, Sync Cardholder Details, and trigger Short Address
+     */
+    function syncEPPAddress() {
+    const isThirdParty = thirdPPCheckbox.checked;
+    const isDifferentPPAddress = isThirdParty && !thirdPPAddrChk.checked;
+    
+    // Determine sources based on whether it's Third Party or Policy Owner
+    const source = isDifferentPPAddress ? ppAddr : poAddr;
+    const sourcePrefix = isThirdParty ? "wzepp_ThirdPP_" : "wzepp_PO_";
+
+    // --- FIXED: SYNC CARDHOLDER DETAILS (GRABBING LIVE VALUES) ---
+    
+    // 1. Get the actual HTML elements first
+    const nircEl = document.getElementById(`${sourcePrefix}NIRC`);
+    const mobileEl = document.getElementById(`${sourcePrefix}Mobile`);
+    const nameEl = document.getElementById(`${sourcePrefix}Name`);
+
+    // 2. Use the live .value if the element exists, otherwise fallback to storage
+    const nircVal = nircEl ? nircEl.value.trim() : (localStorage.getItem(`${sourcePrefix}NIRC`) || "");
+    const mobileVal = mobileEl ? mobileEl.value.trim() : (localStorage.getItem(`${sourcePrefix}Mobile`) || "");
+    const nameVal = nameEl ? nameEl.value.trim() : (localStorage.getItem(`${sourcePrefix}Name`) || "");
+
+    const hiddenNirc = document.getElementById("wzepp_EPP_Cardholder_NIRC");
+    const hiddenMob = document.getElementById("wzepp_EPP_Cardholder_Mobile");
+    const hiddenName = document.getElementById("wzepp_EPP_Cardholder_Name");
+
+    if (hiddenNirc) { hiddenNirc.value = nircVal; localStorage.setItem("wzepp_EPP_Cardholder_NIRC", nircVal); }
+    if (hiddenMob) { hiddenMob.value = mobileVal; localStorage.setItem("wzepp_EPP_Cardholder_Mobile", mobileVal); }
+    if (hiddenName) { hiddenName.value = nameVal; localStorage.setItem("wzepp_EPP_Cardholder_Name", nameVal); }
+        // --- EXISTING: HANDLE ADDRESS ---
+        const parts = [
+            source.a1.value.trim(),
+            `${source.pc.value.trim()} ${source.cy.value.trim()}`.trim(),
+            source.st.value.trim(),
+            source.ct.value.trim()
+        ].filter(part => part.length > 0);
+
+        const combinedString = parts.join(", ").toUpperCase();
+
+        if (typeof saveElValue === "function") {
+            saveElValue({ id: "wzepp_EPP_Full_Address_Line", value: combinedString });
+        }
+        // Also save to the EPP specific bridge key for the mapping
+        localStorage.setItem("wzepp_EPP_Payor_Address", combinedString);
+
+        syncShortAddress(source);
+    }
+
+    /** 2. Toggle 3rd Party Visibility*/
+    function toggleThirdPP() {
+        if (thirdPPCheckbox.checked) {
+            thirdPPInfoSec.style.display = "block";
+            if (secSigPO) secSigPO.style.display = "block";  
+        } else {
+            thirdPPInfoSec.style.display = "none";
+            if (secSigPO) secSigPO.style.display = "none";
+
+            thirdPPInfoSec.querySelectorAll("input").forEach(i => {
+                i.value = "";
+                i.readOnly = false;
+                i.classList.remove("locked");
+                localStorage.removeItem(i.id);
+            });
+            thirdPPAddrChk.checked = false;
+            
+            if (typeof clearSpecificSig === "function") {
+                clearSpecificSig('owner');
+            }
+        }
+        syncEPPAddress();
+    }
+
+    /**
+     * 3. Copy and Lock Address (Same as Insured Logic)
+     */
+    function toggleThirdPPAddress() {
+        const keys = ['ct', 'st', 'cy', 'pc', 'a1'];
+        const isLocked = thirdPPAddrChk.checked;
+        
+        keys.forEach(key => {
+            const input = ppAddr[key];
+            const source = poAddr[key];
+            if (!input || !source) return;
+
+            if (isLocked) {
+                input.value = source.value;
+                input.readOnly = true;
+                input.classList.add("locked");
+                localStorage.setItem(input.id, input.value);
+            } else {
+                input.value = "";
+                input.readOnly = false;
+                input.classList.remove("locked");
+                localStorage.removeItem(input.id);
+            }
+            if (typeof saveElValue === "function") saveElValue(input);
+        });
+        syncEPPAddress();
+    }
+
+    /* --- Event Listeners --- */
+    thirdPPCheckbox.addEventListener("change", toggleThirdPP);
+    thirdPPAddrChk.addEventListener("change", toggleThirdPPAddress);
+
+    // Listen for input on ALL address fields for live-sync
+    [...Object.values(poAddr), ...Object.values(ppAddr)].forEach(input => {
+        if (!input) return;
+        input.addEventListener("input", (e) => {
+            // Auto-sync if "Same Address" is checked
+            if (thirdPPAddrChk.checked && e.target.id.includes("PO_Address")) {
+                toggleThirdPPAddress(); 
+            }
+            if (typeof saveElValue === "function") saveElValue(input);
+            syncEPPAddress();
+        });
+    });
+
+    const liveCardFields = [
+        "wzepp_PO_NIRC", "wzepp_PO_Mobile", "wzepp_PO_Name",
+        "wzepp_ThirdPP_NIRC", "wzepp_ThirdPP_Mobile", "wzepp_ThirdPP_Name"
+    ];
+
+    liveCardFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener("input", () => {
+                // Manually update storage so the 'sync' function sees latest data
+                localStorage.setItem(id, el.value);
+                // Trigger the hidden bridge update
+                syncEPPAddress(); 
+            });
+        }
+    });
+  
+    /* --- Initialization --- */
+    toggleThirdPP(); 
+
+    // Restore saved 3rd party address if it exists
+    if (localStorage.getItem(ppAddr.a1.id)) {
+        Object.values(ppAddr).forEach(input => {
+            const savedVal = localStorage.getItem(input.id);
+            if (savedVal) input.value = savedVal;
+            input.readOnly = true;
+            input.classList.add("locked");
+        });
+        thirdPPAddrChk.checked = true;
+        syncEPPAddress();
+    }
+});
+
+/* ---------- DOB MULTI-INPUT LOGIC ---------- */
+const dobUIFields = [
+    document.getElementById("wzepp_ThirdPP_DOB_MM_UI"),
+    document.getElementById("wzepp_ThirdPP_DOB_DD_UI"),
+    document.getElementById("wzepp_ThirdPP_DOB_YYYY_UI")
+].filter(Boolean);
+
+const dobContainer = document.querySelector(".dob-container");
+
+dobUIFields.forEach((el, idx) => {
+    // 1. Focus Effects for Label
+    el.addEventListener("focus", () => dobContainer.classList.add("active"));
+    el.addEventListener("blur", () => {
+        dobContainer.classList.remove("active");
+        checkDobData();
+    });
+
+    // 2. Typing & Auto-Jump
+    el.addEventListener("input", () => {
+        el.value = el.value.replace(/\D/g, ''); // Numbers only
+
+        // Save to specific PDF fields
+        const pdfIds = ["wzepp_ThirdPP_DOB_MM", "wzepp_ThirdPP_DOB_DD", "wzepp_ThirdPP_DOB_YYYY"];
+        if (typeof saveElValue === "function") {
+            saveElValue({ id: pdfIds[idx], value: el.value });
+        }
+
+        // Jump to next
+        if (el.value.length === el.maxLength && idx < dobUIFields.length - 1) {
+            dobUIFields[idx + 1].focus();
+        }
+        checkDobData();
+    });
+
+    // 3. Backspace
+    el.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && el.value === "" && idx > 0) {
+            dobUIFields[idx - 1].focus();
+        }
+    });
+});
+
+// Function to keep label floating if inputs are not empty
+function checkDobData() {
+    const hasValue = dobUIFields.some(input => input.value !== "");
+    if (hasValue) {
+        dobContainer.classList.add("has-data");
+    } else {
+        dobContainer.classList.remove("has-data");
+    }
+}  
+
+/* ---------- SOURCE OF FUNDS LOGIC ---------- */
+const fundIds = ["wzepp_Fund_Self", "wzepp_Fund_Parents", "wzepp_Fund_Spouse", "wzepp_Fund_Others"];
+
+fundIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.addEventListener("change", (e) => {
+        const value = e.target.checked ? "Yes" : "Off";
+        
+        // Save to PDF
+        if (typeof saveElValue === "function") saveElValue({ id: id, value: value });
+
+        // Show/Hide Specification field
+        if (id === "wzepp_Fund_Others") {
+            const spec = document.getElementById("others_spec_wrapper");
+            spec.style.display = e.target.checked ? "block" : "none";
+        }
+    });
+});  
+
+/* ---------- SOURCE OF WEALTH LOGIC ---------- */
+const wealthIds = [
+    "wzepp_Wealth_Employment", 
+    "wzepp_Wealth_Investment", 
+    "wzepp_Wealth_Savings", 
+    "wzepp_Wealth_Inheritance", 
+    "wzepp_Wealth_Parents", 
+    "wzepp_Wealth_Spouse", 
+    "wzepp_Wealth_Others"
+];
+
+wealthIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.addEventListener("change", (e) => {
+        const isChecked = e.target.checked;
+        const value = isChecked ? "Yes" : "Off";
+        
+        // Save to PDF Checkbox
+        if (typeof saveElValue === "function") saveElValue({ id: id, value: value });
+
+        // Logic for "Others" Checkbox
+        if (id === "wzepp_Wealth_Others") {
+            const specWrapper = document.getElementById("wealth_others_spec_wrapper");
+            const specInput = document.getElementById("wzepp_Wealth_Others_Spec");
+            
+            if (isChecked) {
+                specWrapper.style.display = "block";
+            } else {
+                specWrapper.style.display = "none";
+                // Clear UI and PDF field when unchecked
+                if (specInput) specInput.value = "";
+                if (typeof saveElValue === "function") {
+                    saveElValue({ id: "wzepp_Wealth_Others_Spec_PDF", value: "" });
+                }
+            }
+        }
+    });
+});
+
+// Listener for the Wealth "Others" text input
+const wealthSpecInput = document.getElementById("wzepp_Wealth_Others_Spec");
+if (wealthSpecInput) {
+    wealthSpecInput.addEventListener("input", (e) => {
+        if (typeof saveElValue === "function") {
+            // Mapping to PDF text field
+            saveElValue({ id: "wzepp_Wealth_Others_Spec_PDF", value: e.target.value.toUpperCase() });
+        }
+    });
+}  
+
+/* ---------- 3rd Party Payor NIRC checkbox force ---------- */  
+document.addEventListener("DOMContentLoaded", () => {
+    const triggerBox = document.getElementById("wzepp_ThirdPP_Checkbox");
+    const targetBox = document.getElementById("wzepp_SubmitNIRC_Checkbox");
+
+    if (triggerBox && targetBox) {
+        // --- STEP 4 LOGIC (Run on Page Load) ---
+        // If the user already checked Third Party in a previous session,
+        // make sure the NIRC box is checked visually when the page opens.
+        if (triggerBox.checked || localStorage.getItem("wzepp_ThirdPP_Checkbox") === "true") {
+            targetBox.checked = true;
+        }
+
+        // --- STEP 2 LOGIC (Run on User Click) ---
+        // Listen for changes while the user is interacting with the form.
+        triggerBox.addEventListener("change", function() {
+            if (this.checked) {
+                targetBox.checked = true;
+                localStorage.setItem("wzepp_SubmitNIRC_Checkbox", "true");
+            }
+            // Optional: If you want to uncheck NIRC when Third Party is unchecked
+            /*
+            else {
+                targetBox.checked = false;
+                localStorage.setItem("wzepp_SubmitNIRC_Checkbox", "false");
+            }
+            */
+        });
+    }
+});
+
+/* ---------- Credit Card name copy ---------- */  
+document.addEventListener("DOMContentLoaded", () => {
+  const cardNameInput = document.getElementById("wzepp_Card_Name");
+  const poNameInput   = document.getElementById("wzepp_PO_Name");
+  const thirdPPNameInput = document.getElementById("wzepp_ThirdPP_Name");
+  const thirdPPCheckbox  = document.getElementById("wzepp_ThirdPP_Checkbox");
+
+  function updateCardName() {
+    let name = poNameInput.value.toUpperCase(); // default from Policy Owner
+
+    // If 3rd party exists and name is not empty, override
+    if (thirdPPCheckbox.checked && thirdPPNameInput.value.trim() !== "") {
+      name = thirdPPNameInput.value.toUpperCase();
+    }
+
+    cardNameInput.value = name;
+    localStorage.setItem(cardNameInput.id, name); // save for reload
+  }
+
+  // Copy on load
+  updateCardName();
+
+  // Update whenever relevant fields change
+  poNameInput.addEventListener("input", updateCardName);
+  thirdPPNameInput.addEventListener("input", updateCardName);
+  thirdPPCheckbox.addEventListener("change", updateCardName);
+
+  // Restore from localStorage on reload
+  const savedCardName = localStorage.getItem(cardNameInput.id);
+  if (savedCardName) cardNameInput.value = savedCardName;
+});
+
+/* ---------- Credit Card - RELATIONSHIP LOGIC ---------- */
+const thirdPartyCheck = document.getElementById("wzepp_ThirdPP_Checkbox");
+const relDropdown = document.getElementById("wzepp_Relationship");
+
+function handleRelationshipLock() {
+    if (!thirdPartyCheck || !relDropdown) return;
+
+    const isThirdParty = thirdPartyCheck.checked;
+
+    if (!isThirdParty) {
+        // 1. Force selection to OWNSELF
+        relDropdown.value = "wzepp_Card_Ownself";
+        
+        // 2. Disable other options so user can't change it
+        Array.from(relDropdown.options).forEach(opt => {
+            if (opt.value !== "wzepp_Card_Ownself" && opt.value !== "") {
+                opt.disabled = true;
+            }
+        });
+
+        // 3. Save "Ownself" to PDF
+        if (typeof saveElValue === "function") saveElValue(relDropdown);
+        
+    } else {
+        // 4. If 3rd Party is checked, enable all options
+        Array.from(relDropdown.options).forEach(opt => {
+            opt.disabled = false;
+        });
+    }
+}
+
+// Event Listeners
+if (thirdPartyCheck) {
+    thirdPartyCheck.addEventListener("change", handleRelationshipLock);
+    // Run on load to ensure correct state if page refreshes
+    handleRelationshipLock();
+}
+
+relDropdown.addEventListener("change", (e) => {
+    if (typeof saveElValue === "function") saveElValue(e.target);
+});  
+
+/* ---------- Credit Card CHECKBOX FORCE ---------- */  
+document.addEventListener("DOMContentLoaded", () => {
+    // Force the Credit Card checkbox state in storage
+    const ccCheckbox = document.getElementById("wzepp_Card_Checkbox");
+    
+    if (ccCheckbox) {
+        // 1. Ensure it's checked in the DOM
+        ccCheckbox.checked = true; 
+        
+        // 2. Ensure it's 'true' in storage for the PDF generator
+        localStorage.setItem("wzepp_Card_Checkbox", "true");
+    }
+});  
+
+/* ---------- Credit Card Card Number Processing ---------- */
+
+// 1. Setup references to the 4 UI boxes
+const cardBoxes = [
+  document.getElementById("wzepp_Card_Set1"),
+  document.getElementById("wzepp_Card_Set2"),
+  document.getElementById("wzepp_Card_Set3"),
+  document.getElementById("wzepp_Card_Set4")
+].filter(Boolean);
+
+// 2. The Master Sync Function (Updates 1 Combined field + 16 Individual fields)
+function syncCardData() {
+  let fullString = "";
+  // Collect values from the 4 boxes
+  cardBoxes.forEach(el => fullString += el.value);
+
+  // A. Store for EPP Form (Combined String)
+  if (typeof saveElValue === "function") {
+    saveElValue({ id: "wzepp_Card_Combine", value: fullString });
+  }
+
+  // B. Store for PDF Fields (16 Individual Digits)
+  for (let i = 1; i <= 16; i++) {
+    const digit = fullString[i - 1] || ""; 
+    if (typeof saveElValue === "function") {
+      saveElValue({ id: `wzepp_Card_No_${i}`, value: digit });
+    }
+  }
+}
+
+// 3. Attach Listeners for better User Experience
+cardBoxes.forEach((el, idx) => {
+  
+  // Handle Typing, Digits Only, and Auto-Focus
+  el.addEventListener("input", () => {
+    el.value = el.value.replace(/\D/g, '').slice(0, 4);
+    
+    // Auto-save the individual box change
+    if (typeof saveElValue === "function") saveElValue(el);
+    
+    // Auto-focus next box
+    if (el.value.length === 4 && idx < cardBoxes.length - 1) {
+      cardBoxes[idx + 1].focus();
+    }
+    syncCardData();
+  });
+
+  // Handle Backspace (Go to previous box)
+  el.addEventListener("keydown", (e) => {
+    if (e.key === "Backspace" && el.value.length === 0 && idx > 0) {
+      cardBoxes[idx - 1].focus();
+    }
+  });
+
+  // Handle Paste (Auto-split any string containing numbers)
+  el.addEventListener("paste", (e) => {
+    e.preventDefault();
+    const paste = (e.clipboardData || window.clipboardData).getData('text');
+    const digits = paste.replace(/\D/g, '').slice(0, 16);
+    
+    // Distribute pasted digits into the 4 UI boxes
+    for (let i = 0; i < 4; i++) {
+      if (cardBoxes[i]) {
+        cardBoxes[i].value = digits.slice(i * 4, (i * 4) + 4);
+        if (typeof saveElValue === "function") saveElValue(cardBoxes[i]);
+      }
+    }
+    
+    syncCardData();
+
+    // Focus management after paste
+    if (digits.length < 16) {
+      const nextBoxIndex = Math.floor(digits.length / 4);
+      if (cardBoxes[nextBoxIndex]) cardBoxes[nextBoxIndex].focus();
+    } else {
+      cardBoxes[3].focus();
+    }
+  });
+});
+
+/* ---------- BANK SELECTION LOGIC (text and checkbox output) ---------- */
+
+const bankDropdown = document.getElementById("wzepp_Card_Bank");
+
+if (bankDropdown) {
+  bankDropdown.addEventListener("change", (e) => {
+    const selectedCheckboxId = e.target.value; // "wzepp_Card_MBB"
+    const selectedText = e.target.options[e.target.selectedIndex].text; // "MAYBANK"
+
+    // 1. PRINT TEXT to wzepp_Card_Bank_Text
+    saveElValue({ id: "wzepp_Card_Bank_Text", value: selectedText });
+
+    // 2. TICK CHECKBOX logic
+    // We clear all possible bank checkboxes first so only one is "Yes"
+    const allBankIds = ["wzepp_Card_MBB", "wzepp_Card_PBB", "wzepp_Card_UOB", "wzepp_Card_CIMB", "wzepp_Card_HLB", "wzepp_Card_HSBC", "wzepp_Card_ALLIANCE", "wzepp_Card_STANDCHART"];
+    
+    allBankIds.forEach(id => {
+      saveElValue({ id: id, value: "Off" }); 
+    });
+
+    // Tick the selected one
+    saveElValue({ id: selectedCheckboxId, value: "Yes" });
+  });
+}
+
+/* ---------- Credit Card EXPIRY DATE FORMATTING (WORD + SPLIT) ---------- */
+
+const monthSelect = document.getElementById("wzepp_Card_ExpMonth");
+const yearSelect = document.getElementById("wzepp_Card_ExpYear");
+
+// Mapping for Month Numbers to Words
+const monthNames = {
+  "01": "JANUARY", "02": "FEBRUARY", "03": "MARCH", "04": "APRIL",
+  "05": "MAY", "06": "JUNE", "07": "JULY", "08": "AUGUST",
+  "09": "SEPTEMBER", "10": "OCTOBER", "11": "NOVEMBER", "12": "DECEMBER"
+};
+
+function syncExpiryFormats() {
+  const mm = monthSelect.value || ""; // e.g., "12"
+  const yyyy = yearSelect.value || ""; // e.g., "2028"
+  const yy = yyyy.slice(-2); // e.g., "28"
+
+  // 1. COMBINED FORMAT (Month in Words + Full Year)
+  // Example Result: "DECEMBER 2028"
+  if (mm && yyyy) {
+    const monthWord = monthNames[mm];
+    const combinedString = `${monthWord} ${yyyy}`;
+    
+    if (typeof saveElValue === "function") {
+      saveElValue({ id: "wzepp_Card_Exp_Combine", value: combinedString });
+    }
+  }
+
+  // 2. SPLIT FORMAT FOR PDF BOXES (Individual Digits)
+  if (typeof saveElValue === "function") {
+    // Month digits (MM)
+    saveElValue({ id: "wzepp_Card_Exp_M1", value: mm.charAt(0) });
+    saveElValue({ id: "wzepp_Card_Exp_M2", value: mm.charAt(1) });
+    
+    // Year digits (YY - Last two digits)
+    saveElValue({ id: "wzepp_Card_Exp_Y1", value: yy.charAt(0) });
+    saveElValue({ id: "wzepp_Card_Exp_Y2", value: yy.charAt(1) });
+  }
+}
+
+// Attach listeners
+[monthSelect, yearSelect].forEach(el => {
+  if (el) {
+    el.addEventListener("change", () => {
+      if (typeof saveElValue === "function") saveElValue(el);
+      syncExpiryFormats();
+    });
+  }
+});  
+
+/* ---------- EPP CHECKBOX LOGIC ---------- */
+
+function bindDropdownToCheckboxes(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    if (!dropdown) return;
+
+    dropdown.addEventListener("change", (e) => {
+        const selectedPdfField = e.target.value; 
+        
+        // 1. Clear all checkboxes in this group
+        // This prevents multiple boxes being checked if the user changes selection
+        Array.from(dropdown.options).forEach(opt => {
+            if (opt.value && typeof saveElValue === "function") {
+                saveElValue({ id: opt.value, value: "Off" });
+            }
+        });
+
+        // 2. Tick the selected PDF checkbox
+        if (selectedPdfField && typeof saveElValue === "function") {
+            saveElValue({ id: selectedPdfField, value: "Yes" });
+        }
+
+        // 3. Save the dropdown itself (for page reload persistence)
+        if (typeof saveElValue === "function") saveElValue(e.target);
+    });
+}
+
+// Initialize for both your specific dropdowns
+bindDropdownToCheckboxes("wzepp_Card_EppOption");
+bindDropdownToCheckboxes("wzepp_Card_AfterEPP");  
+
+/* ---------- SIGNATURE MODAL LOGIC ---------- */
+// Helper for selectors (assuming you use this based on your snippet)
+const $ = (id) => document.getElementById(id);
+
+let sigTarget = null;
+const sigModal = $("sigModal");
+const sigCanvas = $("sigCanvas");
+const sigCtx = sigCanvas.getContext("2d");
+
+const signaturePad = new SignaturePad(sigCanvas, {
+  minWidth: 0.7,
+  maxWidth: 2.5,
+  penColor: "black",
+  backgroundColor: "rgba(0,0,0,0)"
+});
+
+function openSig(target) {
+  sigTarget = target;
+  
+  // Set Title Dynamically
+  const displayNames = {
+    'cardholder': 'Card Holder',
+    'owner': 'Policy Owner',
+    'witness': 'Witness'
+  };
+  $("sigModalTitle").textContent = "Sign: " + (displayNames[target] || "User");
+
+  sigModal.style.display = "block";
+  sigModal.setAttribute("aria-hidden", "false");
+
+  requestAnimationFrame(() => {
+    resizeCanvas();
+  });
+}
+
+function resizeCanvas() {
+  const ratio = Math.max(window.devicePixelRatio || 1, 1);
+  const storageKey = sigTarget ? "wzepp_sig_" + sigTarget : null;
+  const savedFromStorage = storageKey ? localStorage.getItem(storageKey) : null;
+
+  // Set visual size vs internal resolution
+  sigCanvas.width = sigCanvas.offsetWidth * ratio;
+  sigCanvas.height = sigCanvas.offsetHeight * ratio;
+  sigCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+  signaturePad.clear(); // Clear internal pad state
+
+  if (savedFromStorage) {
+    const img = new Image();
+    img.onload = () => {
+      sigCtx.drawImage(img, 0, 0, sigCanvas.offsetWidth, sigCanvas.offsetHeight);
+    };
+    img.src = savedFromStorage;
+  }
+}
+
+// "Done" Button logic
+$("sigDone").addEventListener("click", () => {
+  if (!sigTarget) return;
+
+  if (signaturePad.isEmpty()) {
+    alert("Please provide a signature first.");
+    return;
+  }
+
+  const dataURL = sigCanvas.toDataURL("image/png");
+  localStorage.setItem("wzepp_sig_" + sigTarget, dataURL);
+  
+  // Update Preview Image
+  const previewDiv = $("preview_" + sigTarget);
+  previewDiv.innerHTML = `<img src="${dataURL}" style="max-height:100%; width:auto;">`;
+
+  closeSigModal();
+});
+
+// Clear inside modal
+$("sigClear").addEventListener("click", () => {
+  signaturePad.clear();
+});
+
+// Clear from the main form (External buttons)
+function clearSpecificSig(target) {
+  localStorage.removeItem("wzepp_sig_" + target);
+  const label = target === 'cardholder' ? 'Card Holder' : (target === 'owner' ? 'Policy Owner' : 'Witness');
+  $("preview_" + target).innerHTML = `<span>Tap to Sign (${label})</span>`;
+}
+
+function closeSigModal() {
+  sigModal.style.display = "none";
+  sigModal.setAttribute("aria-hidden", "true");
+  sigTarget = null;
+}
+
+$("sigCancel").addEventListener("click", closeSigModal);
+window.addEventListener("resize", resizeCanvas);
+
+// Run this function when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+  const roles = ['cardholder', 'owner', 'witness'];
+
+  roles.forEach(role => {
+    const savedSig = localStorage.getItem("wzepp_sig_" + role);
+    if (savedSig) {
+      // Find the preview div for this role
+      const previewDiv = $("preview_" + role);
+      if (previewDiv) {
+        // Inject the saved image back into the preview box
+        previewDiv.innerHTML = `<img src="${savedSig}" style="max-height:100%; width:auto;" alt="Signature ${role}">`;
+      }
+    }
+  });
+});
+
+async function fillPDF(fileName, action = 'download') {
+    // 0. Prep Data
+    if (typeof syncPayorData === "function") syncPayorData(); 
+    if (typeof syncEPPAddress === "function") syncEPPAddress();
+  
+    try {
+        const mapping = PDF_MAPPING_LOGIC[fileName];
+        if (!mapping) {
+            alert("Error: Mapping logic not found for " + fileName);
+            return;
+        }
+
+        const res = await fetch(fileName);
+        if (!res.ok) throw new Error("Could not find file: " + fileName);
+        
+        const bytes = await res.arrayBuffer();
+        // NOTE: Ensure PDFLib is loaded in your HTML <script> tags
+        const pdfDoc = await PDFLib.PDFDocument.load(bytes);
+        const form = pdfDoc.getForm();
+        const pages = pdfDoc.getPages();
+
+        const isThirdParty = localStorage.getItem("wzepp_ThirdPP_Checkbox") === "true";
+        const layoutKey = isThirdParty ? "third_party" : "ownself";
+        const conditionalFields = mapping.conditionalFields ? mapping.conditionalFields[layoutKey] : {};
+        const combinedFields = { ...mapping.fields, ...conditionalFields };
+
+        // 4. Fill Fields
+        Object.keys(combinedFields).forEach(pdfFieldId => {
+            const storageKey = combinedFields[pdfFieldId];
+            if (!storageKey) return; // Skip if mapping is empty
+
+            let value = localStorage.getItem(storageKey);
+
+            // FIX ISSUE #4: Relationship Text
+            if (storageKey === "wzepp_Relationship") {
+                const relEl = document.getElementById("wzepp_Relationship");
+                if (relEl && relEl.selectedIndex !== -1) {
+                    value = relEl.options[relEl.selectedIndex].text.toUpperCase();
+                }
+            }
+
+            // BRIDGE LOGIC for Checkboxes
+            const bridgeKeys = [
+                localStorage.getItem("wzepp_Relationship"),
+                localStorage.getItem("wzepp_Card_Type"),
+                localStorage.getItem("wzepp_Card_Bank"),
+                localStorage.getItem("wzepp_Card_EppOption"),
+                localStorage.getItem("wzepp_Card_AfterEPP")
+            ];
+
+            if (bridgeKeys.includes(storageKey)) {
+                value = "true";
+            }
+
+            // Fallback to DOM if still empty
+            if (value === null || value === undefined) {
+                const el = document.getElementById(storageKey);
+                if (el) value = el.type === "checkbox" ? el.checked.toString() : el.value;
+            }
+
+            try {
+                const field = form.getField(pdfFieldId);
+                if (field instanceof PDFLib.PDFTextField) {
+                    const textVal = (pdfFieldId.toLowerCase().includes("email")) ? (value || "") : (value || "").toUpperCase();
+                    field.setText(textVal);
+                } else if (field instanceof PDFLib.PDFCheckBox) {
+                    (value === "true" || value === "Yes" || value === "on") ? field.check() : field.uncheck();
+                }
+            } catch (e) { console.warn("Field missing:", pdfFieldId); }
+        });
+
+        // 5. Signature Logic
+        const activeLayout = mapping.signatureLayouts ? mapping.signatureLayouts[layoutKey] : null;
+        if (activeLayout) {
+            for (const sig of activeLayout) {
+                const sigDataUri = localStorage.getItem(sig.id);
+                if (sigDataUri && sigDataUri.startsWith("data:image/png")) {
+                    const img = await pdfDoc.embedPng(sigDataUri);
+                    const originalSize = img.size();
+                    const scaleFactor = sig.factor || 0.40;
+                    const baseWidth = 250; 
+                    const aspectRatio = originalSize.width / originalSize.height;
+
+                    const targetPage = pages[sig.page];
+                    if (targetPage) {
+                        targetPage.drawImage(img, {
+                            x: sig.posX, y: sig.posY,
+                            width: baseWidth * scaleFactor,
+                            height: (baseWidth / aspectRatio) * scaleFactor
+                        });
+                    }
+                }
+            }
+        }
+
+        // 6. Final Output
+        const pdfBytes = await pdfDoc.save();
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+
+        if (action === 'view') {
+            window.open(url, '_blank');
+        } else {
+            const policyNum = localStorage.getItem("wzepp_PolicyNo") || "NEW";
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${policyNum}_${fileName}`;
+            document.body.appendChild(a); // Needed for some browsers
+            a.click();
+            document.body.removeChild(a);
+        }
+
+    } catch (err) {
+        console.error("Critical PDF Error:", err);
+        alert("PDF Error: " + err.message);
+    }
+}
+
+/* ---------- RESET ALL DATA ---------- */
+function resetAllData() {
+  if (!confirm("Are you sure you want to clear all data and signatures from this workspace?")) return;
+
+  // 1. Reset input DOM elements and remove corresponding localStorage keys
+  document.querySelectorAll("input, select, textarea").forEach(el => {
+    if (el.id) {
+      localStorage.removeItem(el.id);
+    }
+
+    if (el.type === "checkbox" || el.type === "radio") {
+      el.checked = false;
+    } else {
+      el.value = "";
+    }
+    el.readOnly = false;
+    el.classList.remove("locked");
+  });
+
+  // 2. Wipe all wzepp_ application keys dynamically from localStorage
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith("wzepp_")) {
+      localStorage.removeItem(key);
+    }
+  });
+
+  // 3. Clear non-prefixed selection/bridge option keys
+  const rawBridgeOptionKeys = [
+    "VISA", "MASTER", "MBB", "PBB", "UOB", "HSBC", 
+    "CIMB", "ALLIANCE", "HLB", "STANDCHART", 
+    "OWNSELF", "SPOUSE", "CHILDREN", "PARENTS", "GRANDPARENTS", "SIBLINGS", "EMPLOYER"
+  ];
+  rawBridgeOptionKeys.forEach(key => localStorage.removeItem(key));
+
+  // 4. Reset Signature Pads & Canvas Contexts
+  if (typeof signaturePad !== "undefined" && signaturePad) {
+    signaturePad.clear();
+  }
+
+  document.querySelectorAll("canvas").forEach(canvas => {
+    const ctx = canvas.getContext("2d");
+    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+  });
+
+  // 5. Reset Signature Preview Boxes
+  const displayNames = {
+    'cardholder': 'Card Holder',
+    'owner': 'Policy Owner',
+    'witness': 'Witness'
+  };
+
+  ['cardholder', 'owner', 'witness'].forEach(role => {
+    const previewEl = document.getElementById("preview_" + role);
+    if (previewEl) {
+      const label = displayNames[role] || role;
+      previewEl.innerHTML = `<span>Tap to Sign (${label})</span>`;
+    }
+  });
+
+  // 6. Reset Wizard Navigation back to Step 1
+  if (typeof navigateTo === "function") {
+    navigateTo(0);
+  }
+
+  // 7. Clean workspace reload
+  window.location.reload();
+}
+  
+//WIZARD TRACKER LOGIC
+const steps = document.querySelectorAll(".wizard-step");
+const indicatorSteps = document.querySelectorAll(".step");
+const nextBtn = document.getElementById("nextBtn");
+const prevBtn = document.getElementById("prevBtn");
+let currentStep = 0;
+
+// 1. Initialize Click Events for the Progress Tracker
+indicatorSteps.forEach((stepCircle, index) => {
+  stepCircle.addEventListener("click", () => {
+    navigateTo(index);
+  });
+});
+
+// 2. Updated Navigation Function (Hides Next button on last step)
+function navigateTo(index) {
+  // Hide current
+  steps[currentStep].classList.remove("active");
+  indicatorSteps[currentStep].classList.remove("active");
+
+  // Update Index
+  currentStep = index;
+
+  // Show new
+  steps[currentStep].classList.add("active");
+  indicatorSteps[currentStep].classList.add("active");
+
+  // Handle "Previous" button visibility
+  prevBtn.style.visibility = (currentStep === 0) ? "hidden" : "visible";
+
+  // Handle "Next" button: Hide it completely on the final step
+  if (currentStep === steps.length - 1) {
+    nextBtn.style.display = "none";
+  } else {
+    nextBtn.style.display = "block";
+    nextBtn.innerText = "Next Step";
+  }
+
+  // Smooth scroll to top of the card
+  document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+}
+
+// 3. Updated Next/Back logic
+function changeStep(n) {
+  let newStep = currentStep + n;
+  
+  // Only navigate if the step actually exists
+  if (newStep >= 0 && newStep < steps.length) {
+    navigateTo(newStep);
+  }
+};  
+
+// iOS-Style Back Navigation Interceptor
+const backToMainLink = document.getElementById("backToMainLink");
+if (backToMainLink) {
+    backToMainLink.addEventListener("click", function(e) {
+        e.preventDefault(); // Always intercept to control the navigation flow cleanly
+        
+        // If the browser has history of a previous page within your system, pop back to it natively
+        if (document.referrer && document.referrer.includes(window.location.hostname)) {
+            window.history.back();
+        } else {
+            // Secure Fallback: If they opened the form directly in a new tab
+            window.location.href = "dashboard.html";
+        }
+    });
+}    
+    
+</script>
+    
+<script>
+    function toggleMobileMenu() {
+        const nav = document.getElementById('navMenu');
+        if (nav) nav.classList.toggle('show');
+    }
+</script>
+    
+</body>
+</html>
