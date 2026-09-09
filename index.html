@@ -379,7 +379,10 @@ width: 40px !important;
             </div>
 
             <nav class="nav-menu" id="navMenu">
-                <a href="index.html" class="nav-item active">TND4 Magic Filler</a>
+                <a href="dashboard.html" class="nav-item">Operational Hub</a>
+                <a href="cipro-experience.html" class="nav-item">CI Pro Experience</a>
+                <a href="eposbuddy.html" class="nav-item">EPOS Buddy</a>
+                <a href="magicfiller.html" class="nav-item active">Magic Filler</a>
             </nav>
         </div>
     </header>
@@ -1065,67 +1068,48 @@ accordance with the Company’s Notice on Personal Data and Privacy as set out i
 <div id="saveStatus">Saved</div>  
 
 <script type="module">
+        // 1. Direct Framework Import (Guarantees Supabase is found cleanly)
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
+        // ⚠️ REMINDER: Keep your real URL and Anon Key here
         const SUPABASE_URL = "https://qotxxqwikxpsjnjddoqm.supabase.co"; 
         const SUPABASE_ANON_KEY = "sb_publishable_xpWOcimLjRbH2dbeRdoBSg_XddyOqYU";    
         
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Global Logout Function
+        // 2. Run the Security Guard Check immediately
+        async function checkAuthGuard() {
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                if (error) throw error;
+                
+                // If no session token is found, kick them straight back to login
+                if (!session) {
+                    window.location.href = "login.html";
+                }
+                console.log("Access Granted:", session.user.email);
+            } catch (err) {
+                console.error("Security guard error:", err);
+                window.location.href = "login.html";
+            }
+        }
+
+        // 3. Bind the Logout function securely to the browser window
         window.handleLogout = async function() {
             try {
+                // Destroy the session token in the cloud
                 await supabase.auth.signOut();
             } catch (err) {
                 console.error("Error during sign out:", err);
             } finally {
-                window.location.href = "../login.html";
+                // Clear out of the dashboard completely
+                window.location.href = "login.html";
             }
         };
 
-        // TND4 Role Security Gatekeeper
-        async function checkPageAccess() {
-            try {
-                const { data: { user }, error: authError } = await supabase.auth.getUser();
-                
-                if (authError || !user) {
-                    window.location.href = "../login.html";
-                    return;
-                }
-
-                // Fetch user profile row from database
-                const { data: profile, error: profileError } = await supabase
-                    .from('user_profiles')
-                    .select('access_role')
-                    .eq('id', user.id)
-                    .single();
-
-                // 🛑 SCREENING RULE: Bounce anyone who isn't admin or tnd4
-                if (profileError || (profile?.access_role !== 'admin' && profile?.access_role !== 'tnd4')) {
-                    alert("Access Denied: TND4 Clearance Level Required.");
-                    window.location.href = "../login.html"; 
-                    return;
-                }
-
-                // 🎉 SUCCESS: Transition out the frosted-glass barrier smoothly
-                const overlay = document.getElementById('loadingStatus');
-                if (overlay) {
-                    overlay.style.opacity = '0';
-                    overlay.style.visibility = 'hidden';
-                    
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                    }, 400); 
-                }
-            } catch (globalErr) {
-                console.error("System structural error:", globalErr);
-                window.location.href = "../login.html";
-            }
-        }
-
-        // 🚀 Initialize verification loop cleanly on entry
-        checkPageAccess();
-    </script>    
+        // Execute guard check right now as the page opens
+        checkAuthGuard();
+    </script>
   
 
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
