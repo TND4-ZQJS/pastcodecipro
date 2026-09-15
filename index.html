@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CI Pro - WhatsApp Document Checklist</title>
+    <title>CI Pro - WhatsApp Document Checklist Generator</title>
     <style>
         /* ============================================================
             GLOBAL DESIGN VARIABLES (Unified Workspace Framework)
@@ -54,35 +54,108 @@
             padding: 32px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
-        .header-title { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; color: var(--text-primary); margin-bottom: 6px; }
-        .header-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; }
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .header-title { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; color: var(--text-primary); margin-bottom: 4px; }
+        .header-subtitle { font-size: 14px; color: var(--text-secondary); }
         
-        .checklist-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+        /* Segmented Control for Toggles */
+        .segmented-control {
+            display: inline-flex;
+            background: #e3e3e8;
+            padding: 3px;
+            border-radius: 980px;
+            gap: 2px;
+        }
+        .segment-btn {
+            border: none;
+            background: transparent;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: 980px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .segment-btn.active {
+            background: var(--surface);
+            color: var(--text-primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Control Panel Grid */
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        .control-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+        }
+
+        /* Role Section Block */
+        .role-section {
+            margin-bottom: 24px;
+            padding: 20px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fbfbfd;
+        }
+        .role-section.hidden { display: none; }
+        .role-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checklist-grid { display: flex; flex-direction: column; gap: 8px; }
         .check-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
-            background: var(--bg);
+            padding: 10px 14px;
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: background 0.15s ease, border-color 0.15s ease;
             user-select: none;
         }
-        .check-item:hover { background: #ececef; border-color: rgba(0, 0, 0, 0.1); }
+        .check-item:hover { background: #f0f0f3; border-color: rgba(0, 0, 0, 0.1); }
         .check-item input[type="checkbox"] {
             width: 18px;
             height: 18px;
             accent-color: var(--accent);
             cursor: pointer;
         }
-        .check-item span { font-size: 15px; color: var(--text-primary); font-weight: 400; }
+        .check-item span { font-size: 14px; color: var(--text-primary); font-weight: 400; }
 
         .output-label { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px; display: block; }
         textarea.preview-box {
             width: 100%;
-            height: 220px;
+            height: 260px;
             background: #fafafa;
             border: 1px solid var(--line);
             border-radius: 10px;
@@ -139,72 +212,89 @@
     <!-- Main Workspace Container -->
     <div class="container">
         <div class="card">
-            <h1 class="header-title">Document Checklist</h1>
-            <p class="header-subtitle">Select the required items to compile a formatted text list for WhatsApp.</p>
+            <div class="header-row">
+                <div>
+                    <h1 class="header-title">Document Checklist</h1>
+                    <p class="header-subtitle">Compile a formatted WhatsApp request list for CI Pro applications.</p>
+                </div>
+                <!-- Language Selector -->
+                <div class="segmented-control" id="langSelector">
+                    <button class="segment-btn active" data-lang="en">English</button>
+                    <button class="segment-btn" data-lang="zh">中文</button>
+                    <button class="segment-btn" data-lang="bi">Bilingual</button>
+                </div>
+            </div>
 
-            <!-- Checklist Inputs -->
-            <div class="checklist-grid" id="checklistGrid">
-                <label class="check-item">
-                    <input type="checkbox" data-has-colon="false" value="Malaysia IC Copy (PDF/Image format)">
-                    <span>Malaysia IC Copy (PDF/Image format)</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" data-has-colon="false" value="Passport Copy (PDF/Image format)">
-                    <span>Passport Copy (PDF/Image format)</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" data-has-colon="false" value="Visa Copy (PDF/Image format)">
-                    <span>Visa Copy (PDF/Image format)</span>
-                </label>
-                  <label class="check-item">
-                    <input type="checkbox" data-has-colon="false" value="Marriage Certificate Copy (PDF/Image format)">
-                    <span>Marriage Certificate Copy (PDF/Image format)</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="TIN No. / SG Work Pass No.">
-                    <span>TIN No. / SG Work Pass No.</span>
-                </label>
-                  <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="Home Address">
-                    <span>Home Address</span>
-                </label>
-                  <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="Company Name">
-                    <span>Company Name</span>
-                </label>
-                  <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="Company Address">
-                    <span>Company Address</span>
-                </label>
-                  <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="Occupation">
-                    <span>Occupation</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="Email Address">
-                    <span>Email Address</span>
-                </label>
-                <!-- Multi-field structured item -->
-                  <label class="check-item">
-                    <input type="checkbox" data-subitems='["Bank Name", "Account Number"]' value="E Banking Info (for claims)">
-                    <span>E Banking Info (for claims)</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" data-subitems='["Bank Name", "Card Number", "Expiry Date"]' value="Credit / Debit Card Info">
-                    <span>Credit / Debit Card Info</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="Height(cm)and Weight(kg)">
-                    <span>Height(cm)and Weight(kg)</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="Length(cm)and Weight(kg)">
-                    <span>Length(cm)and Weight(kg)</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="Any health condition (past and current)">
-                    <span>Any health condition (past and current)</span>
-                </label>
+            <!-- Role & Payment Configuration Panel -->
+            <div class="control-panel">
+                <div class="control-group">
+                    <label>Insured Person</label>
+                    <div class="segmented-control" id="insuredToggle">
+                        <button class="segment-btn active" data-value="same">Same as Owner</button>
+                        <button class="segment-btn" data-value="different">Different Person</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Payment By</label>
+                    <div class="segmented-control" id="payorToggle">
+                        <button class="segment-btn active" data-value="owner">Policy Owner</button>
+                        <button class="segment-btn" data-value="3rd_party">3rd Party Payor</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= POLICY OWNER SECTION ================= -->
+            <div class="role-section" id="sectionOwner">
+                <div class="role-title" id="titleOwner">👤 POLICY OWNER & INSURED DETAILS</div>
+                <div class="checklist-grid">
+                    <label class="check-item"><input type="checkbox" data-has-colon="false" data-en="Malaysia IC Copy (PDF/Image format)" data-zh="马来西亚身份证副本（PDF/图片格式）"><span>Malaysia IC Copy</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="false" data-en="Passport Copy (PDF/Image format)" data-zh="护照副本（PDF/图片格式）"><span>Passport Copy</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="false" data-en="Visa Copy (PDF/Image format)" data-zh="签证副本（PDF/图片格式）"><span>Visa Copy</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="TIN No. / SG Work Pass No." data-zh="税号 (TIN No.) / 新加坡工作准证号码"><span>TIN No. / SG Work Pass No.</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="Home Address" data-zh="居住地址"><span>Home Address</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="Company Name" data-zh="公司名称"><span>Company Name</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="Company Address" data-zh="公司地址"><span>Company Address</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="Occupation" data-zh="职业"><span>Occupation</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="Email Address" data-zh="电子邮箱"><span>Email Address</span></label>
+
+                    <!-- Owner-only Health fields when Insured = Same -->
+                    <div id="ownerHealthFields" class="checklist-grid" style="gap: 8px;">
+                        <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="Height (cm) and Weight (kg)" data-zh="身高 (cm) 与 体重 (kg)"><span>Height (cm) and Weight (kg)</span></label>
+                        <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="Any health condition (past and current)" data-zh="健康状况（以往与目前）"><span>Any health condition (past and current)</span></label>
+                    </div>
+
+                    <!-- Owner Financial fields when Payment = Policy Owner -->
+                    <div id="ownerPaymentFields" class="checklist-grid" style="gap: 8px;">
+                        <label class="check-item"><input type="checkbox" data-subitems-en='["Bank Name", "Account Number"]' data-subitems-zh='["银行名称", "户口号码"]' data-en="E Banking Info (for claims)" data-zh="电子银行资料（理赔用途）"><span>E Banking Info (for claims)</span></label>
+                        <label class="check-item"><input type="checkbox" data-subitems-en='["Bank Name", "Card Number", "Expiry Date"]' data-subitems-zh='["银行名称", "卡号", "有效期限"]' data-en="Credit / Debit Card Info" data-zh="信用卡 / 借记卡资料"><span>Credit / Debit Card Info</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= INSURED SECTION ================= -->
+            <div class="role-section hidden" id="sectionInsured">
+                <div class="role-title">🛡️ INSURED / LIFE ASSURED DETAILS</div>
+                <div class="checklist-grid">
+                    <label class="check-item"><input type="checkbox" data-has-colon="false" data-en="Malaysia IC Copy (PDF/Image format)" data-zh="马来西亚身份证副本（PDF/图片格式）"><span>Malaysia IC Copy</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="false" data-en="Passport Copy (PDF/Image format)" data-zh="护照副本（PDF/图片格式）"><span>Passport Copy</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="false" data-en="Visa Copy (PDF/Image format)" data-zh="签证副本（PDF/图片格式）"><span>Visa Copy</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="Height (cm) and Weight (kg)" data-zh="身高 (cm) 与 体重 (kg)"><span>Height (cm) and Weight (kg)</span></label>
+                    <!-- Exclusively in Insured section -->
+                    <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="Baby Length (cm) and Weight (kg)" data-zh="婴儿身长 (cm) 与 体重 (kg)"><span>Baby Length (cm) and Weight (kg)</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="true" data-en="Any health condition (past and current)" data-zh="健康状况（以往与目前）"><span>Any health condition (past and current)</span></label>
+                </div>
+            </div>
+
+            <!-- ================= 3RD PARTY PAYOR SECTION ================= -->
+            <div class="role-section hidden" id="sectionPayor">
+                <div class="role-title">💳 3RD PARTY PAYOR DETAILS</div>
+                <div class="checklist-grid">
+                    <label class="check-item"><input type="checkbox" data-has-colon="false" data-en="Malaysia IC Copy (PDF/Image format)" data-zh="马来西亚身份证副本（PDF/图片格式）"><span>Malaysia IC Copy</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="false" data-en="Passport Copy (PDF/Image format)" data-zh="护照副本（PDF/图片格式）"><span>Passport Copy</span></label>
+                    <label class="check-item"><input type="checkbox" data-has-colon="false" data-en="Marriage Certificate Copy (PDF/Image format)" data-zh="结婚证书副本（PDF/图片格式）"><span>Marriage Certificate Copy</span></label>
+                    <label class="check-item"><input type="checkbox" data-subitems-en='["Bank Name", "Account Number"]' data-subitems-zh='["银行名称", "户口号码"]' data-en="E Banking Info (for claims)" data-zh="电子银行资料（理赔用途）"><span>E Banking Info (for claims)</span></label>
+                    <label class="check-item"><input type="checkbox" data-subitems-en='["Bank Name", "Card Number", "Expiry Date"]' data-subitems-zh='["银行名称", "卡号", "有效期限"]' data-en="Credit / Debit Card Info" data-zh="信用卡 / 借记卡资料"><span>Credit / Debit Card Info</span></label>
+                </div>
             </div>
 
             <!-- Preview Output -->
@@ -222,43 +312,165 @@
     </div>
 
     <script>
-        const checkboxes = document.querySelectorAll('#checklistGrid input[type="checkbox"]');
+        let currentLang = 'en';
+        let insuredState = 'same';
+        let payorState = 'owner';
+
+        // UI Selectors
+        const langBtns = document.querySelectorAll('#langSelector .segment-btn');
+        const insuredBtns = document.querySelectorAll('#insuredToggle .segment-btn');
+        const payorBtns = document.querySelectorAll('#payorToggle .segment-btn');
+
+        const sectionInsured = document.getElementById('sectionInsured');
+        const sectionPayor = document.getElementById('sectionPayor');
+        const titleOwner = document.getElementById('titleOwner');
+        const ownerHealthFields = document.getElementById('ownerHealthFields');
+        const ownerPaymentFields = document.getElementById('ownerPaymentFields');
         const previewBox = document.getElementById('previewBox');
         const toastMsg = document.getElementById('toastMsg');
 
-        function updatePreview() {
-            const selectedNodes = Array.from(checkboxes).filter(cb => cb.checked);
+        // Toggle Handlers
+        langBtns.forEach(btn => btn.addEventListener('click', (e) => {
+            langBtns.forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentLang = e.target.getAttribute('data-lang');
+            updatePreview();
+        }));
 
-            if (selectedNodes.length === 0) {
+        insuredBtns.forEach(btn => btn.addEventListener('click', (e) => {
+            insuredBtns.forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            insuredState = e.target.getAttribute('data-value');
+            
+            if (insuredState === 'different') {
+                sectionInsured.classList.remove('hidden');
+                ownerHealthFields.style.display = 'none';
+                titleOwner.innerText = '👤 POLICY OWNER DETAILS';
+            } else {
+                sectionInsured.classList.add('hidden');
+                ownerHealthFields.style.display = 'grid';
+                titleOwner.innerText = '👤 POLICY OWNER & INSURED DETAILS';
+            }
+            updatePreview();
+        }));
+
+        payorBtns.forEach(btn => btn.addEventListener('click', (e) => {
+            payorBtns.forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            payorState = e.target.getAttribute('data-value');
+
+            if (payorState === '3rd_party') {
+                sectionPayor.classList.remove('hidden');
+                ownerPaymentFields.style.display = 'none';
+            } else {
+                sectionPayor.classList.add('hidden');
+                ownerPaymentFields.style.display = 'grid';
+            }
+            updatePreview();
+        }));
+
+        // Attach change listeners to all checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', updatePreview);
+        });
+
+        // Text Generator Logic
+        function updatePreview() {
+            let activeSections = [
+                { id: 'sectionOwner', titleEn: '--- 👤 POLICY OWNER DETAILS ---', titleZh: '--- 👤 投保人资料 ---', titleBi: '--- 👤 POLICY OWNER / 投保人 ---' }
+            ];
+
+            if (insuredState === 'same') {
+                activeSections[0].titleEn = '--- 👤 POLICY OWNER & INSURED DETAILS ---';
+                activeSections[0].titleZh = '--- 👤 投保人与受保人资料 ---';
+                activeSections[0].titleBi = '--- 👤 POLICY OWNER & INSURED / 投保人与受保人 ---';
+            } else {
+                activeSections.push({ id: 'sectionInsured', titleEn: '--- 🛡️ INSURED DETAILS ---', titleZh: '--- 🛡️ 受保人资料 ---', titleBi: '--- 🛡️ INSURED / 受保人 ---' });
+            }
+
+            if (payorState === '3rd_party') {
+                activeSections.push({ id: 'sectionPayor', titleEn: '--- 💳 3RD PARTY PAYOR DETAILS ---', titleZh: '--- 💳 第三方付款人资料 ---', titleBi: '--- 💳 3RD PARTY PAYOR / 第三方付款人 ---' });
+            }
+
+            let fullMessage = "";
+            let totalSelected = 0;
+
+            // Greeting Header
+            if (currentLang === 'en') {
+                fullMessage += "Hi,\n\nKindly provide the following document(s) / details for CI Pro application:\n\n";
+            } else if (currentLang === 'zh') {
+                fullMessage += "您好，\n\n请提供以下文件/资料以处理 CI Pro 投保申请：\n\n";
+            } else {
+                fullMessage += "Hi / 您好，\n\nKindly provide the following document(s) / details for CI Pro application:\n请提供以下文件/资料以处理 CI Pro 投保申请：\n\n";
+            }
+
+            activeSections.forEach(sec => {
+                const sectionEl = document.getElementById(sec.id);
+                if (!sectionEl || sectionEl.classList.contains('hidden')) return;
+
+                const selectedCbs = Array.from(sectionEl.querySelectorAll('input[type="checkbox"]:checked'));
+                if (selectedCbs.length === 0) return;
+
+                totalSelected += selectedCbs.length;
+
+                // Add Header for multiple active roles or multiple sections
+                if (activeSections.length > 1) {
+                    if (currentLang === 'en') fullMessage += `${sec.titleEn}\n`;
+                    else if (currentLang === 'zh') fullMessage += `${sec.titleZh}\n`;
+                    else fullMessage += `${sec.titleBi}\n`;
+                }
+
+                selectedCbs.forEach((cb, idx) => {
+                    const hasColon = cb.getAttribute('data-has-colon') === 'true';
+                    const colonSuffix = hasColon ? ' :' : '';
+
+                    const textEn = cb.getAttribute('data-en');
+                    const textZh = cb.getAttribute('data-zh');
+
+                    const subEn = cb.getAttribute('data-subitems-en');
+                    const subZh = cb.getAttribute('data-subitems-zh');
+
+                    if (subEn) {
+                        const parsedEn = JSON.parse(subEn);
+                        const parsedZh = JSON.parse(subZh);
+
+                        if (currentLang === 'en') {
+                            fullMessage += `${idx + 1}. ${textEn}\n`;
+                            parsedEn.forEach(item => fullMessage += `   - ${item} :\n`);
+                        } else if (currentLang === 'zh') {
+                            fullMessage += `${idx + 1}. ${textZh}\n`;
+                            parsedZh.forEach(item => fullMessage += `   - ${item} :\n`);
+                        } else {
+                            fullMessage += `${idx + 1}. ${textEn} / ${textZh}\n`;
+                            parsedEn.forEach((item, i) => fullMessage += `   - ${item} / ${parsedZh[i]} :\n`);
+                        }
+                    } else {
+                        if (currentLang === 'en') {
+                            fullMessage += `${idx + 1}. ${textEn}${colonSuffix}\n`;
+                        } else if (currentLang === 'zh') {
+                            fullMessage += `${idx + 1}. ${textZh}${colonSuffix}\n`;
+                        } else {
+                            fullMessage += `${idx + 1}. ${textEn} / ${textZh}${colonSuffix}\n`;
+                        }
+                    }
+                });
+
+                fullMessage += "\n";
+            });
+
+            if (totalSelected === 0) {
                 previewBox.value = "Please select at least one document from the checklist above.";
                 return;
             }
 
-            let text = "Hi,\n\nKindly provide the following document(s) / details for CI Pro application:\n\n";
-            
-            selectedNodes.forEach((cb, index) => {
-                const subitemsAttr = cb.getAttribute('data-subitems');
-                
-                if (subitemsAttr) {
-                    // Render parent title with bulleted sub-fields underneath
-                    const subitems = JSON.parse(subitemsAttr);
-                    text += `${index + 1}. ${cb.value}\n`;
-                    subitems.forEach(sub => {
-                        text += `   - ${sub} :\n`;
-                    });
-                } else {
-                    // Standard single line item
-                    const addColon = cb.getAttribute('data-has-colon') === 'true';
-                    const colonSuffix = addColon ? ' :' : '';
-                    text += `${index + 1}. ${cb.value}${colonSuffix}\n`;
-                }
-            });
+            if (currentLang === 'en') fullMessage += "Thank you!";
+            else if (currentLang === 'zh') fullMessage += "谢谢！";
+            else fullMessage += "Thank you! / 谢谢！";
 
-            text += "\nThank you!";
-            previewBox.value = text;
+            previewBox.value = fullMessage;
         }
 
-        checkboxes.forEach(cb => cb.addEventListener('change', updatePreview));
+        // Initial setup on load
         updatePreview();
 
         function copyWhatsAppText() {
