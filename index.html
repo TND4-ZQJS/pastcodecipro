@@ -190,7 +190,7 @@
                     <span>E Banking Info (for claims)</span>
                 </label>
                 <label class="check-item">
-                    <input type="checkbox" data-subitems='["Bank Name", "Card Number", "Expiry Date (MM/YY)"]' value="Credit / Debit Card Info">
+                    <input type="checkbox" data-subitems='["Bank Name", "Card Number", "Expiry Date"]' value="Credit / Debit Card Info">
                     <span>Credit / Debit Card Info</span>
                 </label>
                 <label class="check-item">
@@ -234,7 +234,7 @@
                 return;
             }
 
-            let text = "Hi,\n\nKindky provide the following document(s) / details for CI Pro application:\n\n";
+            let text = "Hi,\n\nKindly provide the following document(s) / details for CI Pro application:\n\n";
             
             selectedNodes.forEach((cb, index) => {
                 const subitemsAttr = cb.getAttribute('data-subitems');
