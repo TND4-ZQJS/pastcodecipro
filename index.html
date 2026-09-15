@@ -148,26 +148,38 @@
                     <input type="checkbox" data-has-colon="false" value="IC / Passport Copy (PDF format)">
                     <span>IC / Passport Copy (PDF format)</span>
                 </label>
+                  <label class="check-item">
+                    <input type="checkbox" data-has-colon="true" value="Home Address">
+                    <span>Home Address</span>
+                </label>
+                  <label class="check-item">
+                    <input type="checkbox" data-has-colon="true" value="Company Name">
+                    <span>Company Name</span>
+                </label>
+                  <label class="check-item">
+                    <input type="checkbox" data-has-colon="true" value="Company Address">
+                    <span>Company Address</span>
+                </label>
+                  <label class="check-item">
+                    <input type="checkbox" data-has-colon="true" value="Occupation">
+                    <span>Occupation</span>
+                </label>
                 <label class="check-item">
                     <input type="checkbox" data-has-colon="true" value="Email Address">
                     <span>Email Address</span>
                 </label>
                 <!-- Multi-field structured item -->
+                  <label class="check-item">
+                    <input type="checkbox" data-subitems='["Bank Name", "Account Number"]' value="E Banking Info (for claims)">
+                    <span>E Banking Info (for claims)</span>
+                </label>
                 <label class="check-item">
                     <input type="checkbox" data-subitems='["Bank Name", "Card Number", "Expiry Date (MM/YY)"]' value="Credit / Debit Card Info">
                     <span>Credit / Debit Card Info</span>
                 </label>
                 <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="Latest 3 Months Bank Statements (PDF)">
-                    <span>Latest 3 Months Bank Statements (PDF)</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="Latest Payslip (PDF)">
-                    <span>Latest Payslip (PDF)</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" data-has-colon="true" value="EA Form / Income Tax Return">
-                    <span>EA Form / Income Tax Return</span>
+                    <input type="checkbox" data-has-colon="true" value="Any health condition (past and current)">
+                    <span>Any health condition (past and current)</span>
                 </label>
             </div>
 
@@ -198,7 +210,7 @@
                 return;
             }
 
-            let text = "Hi,\n\nPlease provide the following document(s) / details for your CI Pro application:\n\n";
+            let text = "Hi,\n\nKindky provide the following document(s) / details for CI Pro application:\n\n";
             
             selectedNodes.forEach((cb, index) => {
                 const subitemsAttr = cb.getAttribute('data-subitems');
